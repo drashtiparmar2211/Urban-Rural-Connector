@@ -27,7 +27,7 @@ mail = Mail(app)
 # Initialize the serializer using your Secret Key
 s = URLSafeTimedSerializer(app.config['SECRET_KEY'])
 
-client = Groq(api_key="Enter_Groq_API_KEY")
+client = Groq(api_key="YOUR_API_KEY_HERE")
 
 # ==================== CONFIGURATION ====================
 app.config['SECRET_KEY'] = 'urc-india-secret-2026'

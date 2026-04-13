@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container" style="max-width: 500px; margin-top: 100px;">
+    <div class="card" style="padding: 40px; border-radius: 20px;">
+        <h2 style="text-align: center; color: var(--primary-green);">New Password</h2>
+        <form method="POST" action="">
+            <div class="form-group">
+                <label>Enter New Password</label>
+                <input type="password" name="password" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label>Confirm New Password</label>
+                <input type="password" name="confirm_password" class="form-control" required>
+            </div>
+            <button type="submit" class="btn-primary" style="width: 100%; margin-top: 20px; border: none; padding: 12px;">Update Password</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

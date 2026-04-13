@@ -1,0 +1,100 @@
+{% extends "base.html" %}
+
+{% block title %}Knowledge Hub - URC India{% endblock %}
+
+{% block content %}
+<div class="container" style="padding: 40px 20px;">
+    <div style="text-align: center; margin-bottom: 50px;">
+        <h1 style="color: var(--primary-green); font-weight: 800; margin-bottom: 10px;">Roots & Routes Knowledge Hub</h1>
+        <p style="color: var(--text-medium); max-width: 700px; margin: 0 auto;">
+            Bridging the gap between traditional rural wisdom and modern urban innovation. 
+            Share a remedy or propose a tech solution!
+        </p>
+        
+        {% if session.get('user_id') %}
+        <button onclick="toggleForm()" class="btn-signup" style="margin-top: 25px; padding: 12px 30px; border: none; border-radius: 50px; font-weight: 600; cursor: pointer;">
+            + Share Your Knowledge
+        </button>
+        {% endif %}
+    </div>
+
+    <div id="contributionForm" class="card" style="display: none; max-width: 700px; margin: 0 auto 50px; padding: 30px;">
+        <h3 style="margin-bottom: 20px;">What would you like to share?</h3>
+        <form action="{{ url_for('submit_contribution') }}" method="POST">
+            <div class="form-group">
+                <label>Title</label>
+                <input type="text" name="title" class="form-input" placeholder="e.g. Natural Pest Control for Wheat" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1.5px solid #dfe6e9;">
+            </div>
+            <div class="form-group" style="margin-top: 15px;">
+                <label>Details</label>
+                <textarea name="content" class="form-input" rows="4" placeholder="Describe your remedy or tech idea in detail..." required style="width: 100%; padding: 10px; border-radius: 8px; border: 1.5px solid #dfe6e9; resize: none;"></textarea>
+            </div>
+            <div style="margin-top: 20px; display: flex; gap: 10px;">
+                <button type="submit" class="btn-signup" style="padding: 10px 25px; border: none; border-radius: 8px; cursor: pointer;">Post to Hub</button>
+                <button type="button" onclick="toggleForm()" style="padding: 10px 25px; border: 1.5px solid #ccc; background: none; border-radius: 8px; cursor: pointer;">Cancel</button>
+            </div>
+        </form>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+        
+        <div>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 25px; border-bottom: 3px solid #8B4513; padding-bottom: 10px;">
+                <span style="font-size: 1.5rem;">🌿</span>
+                <h2 style="margin: 0; color: #8B4513;">Rural Remedies</h2>
+            </div>
+            
+            {% for item in remedies %}
+            <div class="card" style="margin-bottom: 20px; padding: 20px; border-left: 5px solid #8B4513;">
+                <h4 style="color: #2c3e50; margin-bottom: 10px;">{{ item.title }}</h4>
+                <p style="font-size: 0.95rem; color: #5D5346;">{{ item.content }}</p>
+                <div style="margin-top: 15px; font-size: 0.85rem; color: #8B8378; font-style: italic;">
+                    Shared by a Rural Producer on {{ item.created_at.strftime('%d %b, %Y') }}
+                </div>
+            </div>
+            {% else %}
+            <p style="color: #8B8378;">No remedies shared yet. Be the first!</p>
+            {% endfor %}
+        </div>
+
+        <div>
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 25px; border-bottom: 3px solid #27ae60; padding-bottom: 10px;">
+                <span style="font-size: 1.5rem;">⚙️</span>
+                <h2 style="margin: 0; color: #27ae60;">Tech Exchange</h2>
+            </div>
+            
+            {% for item in tech_ideas %}
+            <div class="card" style="margin-bottom: 20px; padding: 20px; border-left: 5px solid #27ae60;">
+                <h4 style="color: #2c3e50; margin-bottom: 10px;">{{ item.title }}</h4>
+                <p style="font-size: 0.95rem; color: #5D5346;">{{ item.content }}</p>
+                <div style="margin-top: 15px; font-size: 0.85rem; color: #8B8378; font-style: italic;">
+                    Suggested by an Urban Innovator on {{ item.created_at.strftime('%d %b, %Y') }}
+                </div>
+            </div>
+            {% else %}
+            <p style="color: #8B8378;">No tech ideas suggested yet. Share your innovation!</p>
+            {% endfor %}
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function toggleForm() {
+        const form = document.getElementById('contributionForm');
+        form.style.display = form.style.display === 'none' ? 'block' : 'none';
+    }
+</script>
+
+<style>
+    .card {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        transition: transform 0.3s ease;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+    }
+</style>
+{% endblock %}

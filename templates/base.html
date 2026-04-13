@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Urban Rural Connector - Bridging India's Roots and Routes">
+    <title>{% block title %}URC India{% endblock %}</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        :root {
+            --primary-green: #27ae60;
+            --dark-green: #219150;
+            --text-dark: #2c3e50;
+            --bg-white: #ffffff;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background-color: transparent;
+        }
+
+        /* --- NAVBAR STRUCTURE --- */
+        .navbar {
+            background-color: var(--bg-white);
+            box-shadow: var(--shadow);
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 2000;
+            height: 80px;
+            display: flex;
+            align-items: center;
+        }
+
+        .nav-container {
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr;
+            /* Left, Center, Right */
+            align-items: center;
+            max-width: 1300px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+
+        /* LEFT: LOGO */
+        .logo-section {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: var(--primary-green);
+            text-decoration: none;
+            letter-spacing: -1px;
+        }
+
+        /* CENTER: MAIN LINKS */
+        .center-links {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .center-links a,
+        .drop-trigger {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+
+        .center-links a:hover,
+        .dropdown:hover .drop-trigger {
+            color: var(--primary-green);
+        }
+
+        /* RIGHT: AUTH & PROFILE */
+        .right-auth {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* --- DROPDOWN HOVER LOGIC --- */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            padding: 10px 0;
+        }
+
+        .dropdown-content {
+            display: none;
+            /* Hidden by default */
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: white;
+            min-width: 200px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+            border-radius: 12px;
+            padding: 10px 0;
+            z-index: 100;
+            border: 1px solid #eee;
+        }
+
+        /* Show on Hover */
+        .dropdown:hover .dropdown-content {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateX(-50%) translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateX(-50%) translateY(0);
+            }
+        }
+
+        .dropdown-content a {
+            color: var(--text-dark);
+            padding: 12px 20px;
+            text-decoration: none;
+            display: block;
+            font-size: 0.9rem;
+            transition: 0.2s;
+        }
+
+        .dropdown-content a:hover {
+            background-color: #f1f8f4;
+            color: var(--primary-green);
+        }
+
+        /* USER PROFILE HOVER (Right side) */
+        .user-profile-trigger {
+            background: #f1f8f4;
+            padding: 8px 18px;
+            border-radius: 50px;
+            font-weight: 700;
+            color: var(--primary-green);
+            cursor: pointer;
+            border: 1px solid #e0eee5;
+        }
+
+        /* BUTTON STYLES */
+        .btn-nav {
+            padding: 10px 22px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: 0.3s;
+        }
+
+        .btn-login {
+            border: 2px solid var(--primary-green);
+            color: var(--primary-green);
+        }
+
+        .btn-signup {
+            background-color: var(--primary-green);
+            color: white;
+            border: 2px solid var(--primary-green);
+        }
+
+        .btn-signup:hover {
+            background-color: var(--dark-green);
+        }
+
+        main {
+            margin-top: 80px;
+            min-height: 80vh;
+        }
+
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            margin-top: 50px;
+        }
+    </style>
+
+    {% block extra_css %}{% endblock %}
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo-section">
+                <a href="{{ url_for('homepage') }}" class="logo">URC</a>
+            </div>
+
+            <ul class="center-links">
+                <li><a href="{{ url_for('homepage') }}">Home</a></li>
+
+                <li class="dropdown">
+                    <span class="drop-trigger">Village Market ▾</span>
+                    <div class="dropdown-content">
+                        <a href="{{ url_for('shop', category='dairy') }}">🥛 Milk Products</a>
+                        <a href="{{ url_for('shop', category='crops') }}">🌾 Grains & Crops</a>
+                        <a href="{{ url_for('shop', category='handicrafts') }}">🎨 Village Works</a>
+                        <a href="{{ url_for('shop', category='vegetables') }}">🍅 Vegetables & Fruits</a>
+                    </div>
+                </li>
+
+                <li><a href="{{ url_for('reverse_market') }}">Tech Exchange</a></li>
+                <li><a href="{{ url_for('knowledge_hub') }}">Knowledge Hub</a></li>
+                <li><a href="{{ url_for('about') }}">About</a></li>
+            </ul>
+
+            <div class="right-auth">
+                {% if session.get('user_id') %}
+                <div class="dropdown">
+                    <span class="user-profile-trigger">Hi, {{ session['user_name'] }} ▾</span>
+                    <div class="dropdown-content" style="right: 0; left: auto; transform: none;">
+                        <a href="{{ url_for('profile') }}">👤 My Profile</a>
+                        <a href="{{ url_for('dashboard', user_id=session['user_id']) }}">📊 Dashboard</a>
+
+                        {% if session['user_role'] == 'rural' %}
+                        <a href="{{ url_for('seller_orders') }}">🔔 New Orders</a>
+                        <a href="{{ url_for('add_product') }}">➕ List My Products</a>
+                        {% else %}
+                        <a href="{{ url_for('view_cart') }}">
+                            🛒 My Cart
+                            {% if session.get('cart') %}
+                            <span
+                                style="background: var(--primary-green); color: white; border-radius: 10px; padding: 0 6px; font-size: 11px; float: right; margin-top: 2px;">
+                                {{ session['cart']|length }}
+                            </span>
+                            {% endif %}
+                        </a>
+                        <a href="{{ url_for('my_orders') }}">📦 My Orders</a>
+                        <a href="{{ url_for('impact_journey') }}">🌱 Impact Journey</a>
+                        {% endif %}
+
+                        <hr style="border: 0; border-top: 1px solid #eee; margin: 5px 0;">
+                        <a href="{{ url_for('logout') }}" style="color: #e74c3c;">Logout</a>
+                    </div>
+                </div>
+                {% else %}
+                <a href="{{ url_for('login') }}" class="btn-nav btn-login">Login</a>
+                <a href="{{ url_for('signup') }}" class="btn-nav btn-signup">Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <div id="bot-container">
+    <button id="chat-circle">
+        <svg viewBox="0 0 64 64" width="60" height="60">
+            <rect x="12" y="20" width="40" height="32" rx="4" fill="#6B8E23" />
+            <rect x="28" y="8" width="8" height="12" rx="1" fill="#4B6E13" />
+            <circle cx="32" cy="8" r="4" fill="#6B8E23" />
+            <circle cx="24" cy="36" r="4" fill="white" />
+            <circle cx="24" cy="36" r="2" fill="#2c3e50" />
+            <circle cx="40" cy="36" r="4" fill="white" />
+            <circle cx="40" cy="36" r="2" fill="#2c3e50" />
+            <rect x="20" y="46" width="24" height="2" fill="white" />
+        </svg>
+    </button>
+
+    <div class="chat-box" id="chat-box" style="display: none;">
+        <div class="chat-box-header">
+            URC Smart Assistant
+            <span id="chat-box-toggle">×</span>
+        </div>
+        <div class="chat-box-body" id="chat-content">
+            <div class="chat-msg bot"><strong>Bot:</strong> Hello! Ask me about Urban, Rural, or Transport services.</div>
+        </div>
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" placeholder="Type here and press Enter...">
+            <button id="chat-submit">Send</button>
+        </div>
+    </div>
+</div>
+    <div id="global-flash-data" style="display: none;">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+        {% for category, message in messages %}
+        <span class="flash-data" data-category="{{ category }}" data-message="{{ message }}"></span>
+        {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const messages = document.querySelectorAll('.flash-data');
+            messages.forEach(msg => {
+                const category = msg.getAttribute('data-category');
+                const text = msg.getAttribute('data-message');
+
+                if (category === 'error') {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Wait a moment...',
+                        text: text,
+                        confirmButtonColor: '#e74c3c'
+                    });
+                } else if (category === 'success') {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Excellent!',
+                        text: text,
+                        confirmButtonColor: '#27ae60',
+                        timer: 3000
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'info',
+                        title: 'Note',
+                        text: text,
+                        confirmButtonColor: '#3498db'
+                    });
+                }
+            });
+        });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+</body>
+
+</html>

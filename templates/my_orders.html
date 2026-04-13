@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container" style="max-width: 800px; margin: 50px auto; padding: 20px;">
+    <h2>📦 My Orders</h2>
+    {% if orders %}
+        {% for order in orders %}
+        <div style="background: white; padding: 20px; margin-bottom: 10px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; box-shadow: var(--shadow);">
+            <div>
+                <h4 style="margin:0;">{{ order.product_name }}</h4>
+                <p style="margin:0; color: #7f8c8d;">Status: {{ order.status }}</p>
+            </div>
+            <div>
+                <strong style="margin-right: 20px;">₹{{ order.price }}</strong>
+                <a href="{{ url_for('complete_order', order_id=order.id) }}" style="background: #27ae60; color: white; padding: 8px 15px; border-radius: 5px; text-decoration: none; font-size: 0.8rem;">Item Received</a>
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>No active orders.</p>
+    {% endif %}
+</div>
+{% endblock %}

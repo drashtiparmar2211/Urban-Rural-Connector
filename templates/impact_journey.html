@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container" style="max-width: 800px; margin: 50px auto; padding: 20px; background: white; border-radius: 15px; box-shadow: var(--shadow);">
+    <h2 style="color: var(--primary-green);">🌱 My Impact Journey</h2>
+    <p>See how your purchases are strengthening India's rural economy.</p>
+    <hr>
+    
+    <div style="background: #f1f8f4; padding: 30px; border-radius: 12px; text-align: center; margin-top: 20px;">
+        <h3 style="margin: 0; color: var(--text-dark);">Total Contribution</h3>
+        <p style="font-size: 3rem; font-weight: 800; color: var(--primary-green); margin: 10px 0;">₹{{ impact }}</p>
+        <p style="color: #2ecc71; font-weight: 600;">Directly supported rural families in your state.</p>
+    </div>
+
+    <div style="margin-top: 30px;">
+        <h4>Why it matters?</h4>
+        <p>Every purchase through <strong>URC</strong> removes the middleman, ensuring the farmer or artisan gets 100% of the value they deserve.</p>
+    </div>
+</div>
+{% endblock %}

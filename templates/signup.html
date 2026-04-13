@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% block title %}Register - Urban Rural Connector{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 600px; padding: 100px 0;">
+    <div class="card" style="padding: 40px; border-radius: 20px; background: white; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border: 1px solid #eee;">
+        
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h2 style="color: #2c3e50; font-weight: 700; margin-bottom: 10px;">Create Account</h2>
+            <p style="color: #7f8c8d; font-size: 0.9rem;">Join the movement bridging India's Roots and Routes</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('signup') }}">
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #34495e;">Full Name</label>
+                <input type="text" name="name" class="form-input" placeholder="Enter your full name" required>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                <div class="form-group">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #34495e;">Phone Number</label>
+                    <input type="tel" name="phone" class="form-input" placeholder="+91..." required>
+                </div>
+                <div class="form-group">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #34495e;">Email Address</label>
+                    <input type="email" name="email" class="form-input" placeholder="name@example.com" required>
+                </div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+                <div class="form-group">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #34495e;">I am a...</label>
+                    <select name="role" id="roleSelect" class="form-input" onchange="updateLocationFields()" style="height: 45px;">
+                        <option value="urban">Urban Buyer</option>
+                        <option value="rural">Rural Producer (Farmer/Artisan)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #34495e;">State</label>
+                    <input type="text" name="location" class="form-input" placeholder="e.g. Gujarat" required>
+                </div>
+            </div>
+
+            <div id="villageGroup" class="form-group" style="margin-bottom: 15px; display: none;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #34495e;">Village Name</label>
+                <input type="text" name="village" class="form-input" placeholder="Enter your village name">
+            </div>
+
+            <div id="cityGroup" class="form-group" style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #34495e;">City Name</label>
+                <input type="text" name="city" class="form-input" placeholder="Enter your city name">
+            </div>
+
+            <div class="form-group" style="margin-bottom: 15px;">
+                <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #34495e;">Full Address</label>
+                <textarea name="address" class="form-input" rows="2" placeholder="House no, Street, Landmark, Pincode" style="resize: none;"></textarea>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 25px;">
+                <div class="form-group">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #34495e;">Password</label>
+                    <input type="password" name="password" class="form-input" placeholder="••••••••" required>
+                </div>
+                <div class="form-group">
+                    <label style="display: block; margin-bottom: 5px; font-weight: 600; color: #34495e;">Confirm Password</label>
+                    <input type="password" name="confirm_password" class="form-input" placeholder="••••••••" required>
+                </div>
+            </div>
+
+            <button type="submit" class="btn-signup" style="width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; background-color: #27ae60; color: white;">
+                Create My Account
+            </button>
+        </form>
+
+        <p style="text-align: center; margin-top: 25px; color: #7f8c8d; font-size: 0.9rem;">
+            Already have an account? <a href="{{ url_for('login') }}" style="color: #27ae60; font-weight: 700; text-decoration: none;">Login here</a>
+        </p>
+    </div>
+</div>
+
+<style>
+    .form-input {
+        width: 100%;
+        padding: 10px;
+        border-radius: 8px;
+        border: 1.5px solid #dfe6e9;
+        outline: none;
+        transition: border-color 0.3s;
+        box-sizing: border-box;
+    }
+    .form-input:focus {
+        border-color: #27ae60;
+    }
+    .btn-signup:hover {
+        background-color: #219150 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+    }
+</style>
+
+<div id="flash-data" style="display: none;">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <span class="flash-msg" data-category="{{ category }}" data-message="{{ message }}"></span>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</div>
+
+<script>
+    function updateLocationFields() {
+        const role = document.getElementById('roleSelect').value;
+        const villageGroup = document.getElementById('villageGroup');
+        const cityGroup = document.getElementById('cityGroup');
+        
+        if (role === 'rural') {
+            villageGroup.style.display = 'block';
+            cityGroup.style.display = 'none';
+        } else {
+            villageGroup.style.display = 'none';
+            cityGroup.style.display = 'block';
+        }
+    }
+
+    // Combined window.onload for Location Fields and SweetAlert Dialogs
+    window.onload = function() {
+        updateLocationFields();
+
+        // Handle Interesting Dialog Popups using SweetAlert2
+        const flashMessages = document.querySelectorAll('.flash-msg');
+        flashMessages.forEach(function(el) {
+            const category = el.getAttribute('data-category');
+            const message = el.getAttribute('data-message');
+            
+            if (category === 'error') {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Signup Failed',
+                    text: message,
+                    confirmButtonColor: '#e74c3c',
+                    showClass: { popup: 'animate__animated animate__shakeX' }
+                });
+            } else if (category === 'success') {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Welcome to URC!',
+                    text: message,
+                    confirmButtonColor: '#27ae60',
+                    timer: 4000
+                });
+            }
+        });
+    };
+</script>
+{% endblock %}

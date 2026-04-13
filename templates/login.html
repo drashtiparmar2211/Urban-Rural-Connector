@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Urban Rural Connector{% endblock %}
+
+{% block content %}
+<div class="container" style="max-width: 450px; padding: 120px 0;">
+    <div class="card" style="padding: 40px; border-radius: 20px; background: white; box-shadow: 0 15px 35px rgba(0,0,0,0.1); border: 1px solid #eee;">
+        
+        <div style="text-align: center; margin-bottom: 30px;">
+            <h2 style="color: #2c3e50; font-weight: 700; margin-bottom: 10px;">Welcome Back</h2>
+            <p style="color: #7f8c8d; font-size: 0.9rem;">Please enter your details to login</p>
+        </div>
+
+        <form method="POST" action="{{ url_for('login') }}">
+            <div class="form-group" style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; font-weight: 600; color: #34495e;">Email or Phone Number</label>
+                <input type="text" name="identity" placeholder="example@mail.com or +91..." 
+                       style="width: 100%; padding: 12px; border-radius: 8px; border: 1.5px solid #dfe6e9; outline: none; transition: border-color 0.3s;" 
+                       onfocus="this.style.borderColor='#27ae60'" onblur="this.style.borderColor='#dfe6e9'" required>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                    <label style="font-weight: 600; color: #34495e;">Password</label>
+                    <a href="{{ url_for('forgot_password_request') }}" style="font-size: 0.8rem; color: #27ae60; text-decoration: none; font-weight: 600;">Forgot Password?</a>
+                </div>
+                <input type="password" name="password" placeholder="••••••••" 
+                       style="width: 100%; padding: 12px; border-radius: 8px; border: 1.5px solid #dfe6e9; outline: none; transition: border-color 0.3s;" 
+                       onfocus="this.style.borderColor='#27ae60'" onblur="this.style.borderColor='#dfe6e9'" required>
+            </div>
+
+            <div style="margin-bottom: 25px; display: flex; align-items: center; gap: 8px;">
+                <input type="checkbox" id="remember" name="remember">
+                <label for="remember" style="font-size: 0.85rem; color: #7f8c8d; cursor: pointer;">Remember me</label>
+            </div>
+
+            <button type="submit" class="btn-signup" style="width: 100%; padding: 14px; border: none; border-radius: 8px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: 0.3s; background-color: #27ae60; color: white;">
+                Login to Dashboard
+            </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 25px; padding-top: 20px; border-top: 1px solid #f1f2f6;">
+            <p style="color: #7f8c8d; font-size: 0.9rem;">
+                New to URC India? <a href="{{ url_for('signup') }}" style="color: #27ae60; font-weight: 700; text-decoration: none;">Create an Account</a>
+            </p>
+        </div>
+    </div>
+</div>
+
+<style>
+    button[type="submit"]:hover {
+        background-color: #219150 !important;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(39, 174, 96, 0.3);
+    }
+</style>
+
+<div id="flash-data" style="display: none;">
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <span class="flash-msg" data-category="{{ category }}" data-message="{{ message }}"></span>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const flashMessages = document.querySelectorAll('.flash-msg');
+        
+        flashMessages.forEach(function(el) {
+            const category = el.getAttribute('data-category');
+            const message = el.getAttribute('data-message');
+            
+            if (category === 'error') {
+                // INTERESTING ERROR DIALOG
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Login Failed',
+                    text: message,
+                    confirmButtonColor: '#e74c3c',
+                    showClass: { popup: 'animate__animated animate__shakeX' }
+                });
+            } else if (category === 'success') {
+                // INTERESTING SUCCESS DIALOG
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Welcome Back!',
+                    text: message,
+                    confirmButtonColor: '#27ae60',
+                    timer: 3000
+                });
+            }
+        });
+    });
+</script>
+
+{% endblock %}

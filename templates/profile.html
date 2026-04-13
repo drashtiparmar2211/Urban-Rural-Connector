@@ -1,0 +1,187 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile - Urban Rural Connector{% endblock %}
+
+{% block content %}
+<div id="profile-theme-wrapper" class="profile-container">
+    <div class="profile-card">
+        <div class="profile-header">
+            <div class="avatar-circle">
+                {{ user.name[0] | upper }}
+            </div>
+            <h1 style="margin: 0 0 10px 0; font-weight: 800; font-size: 2.2rem;">{{ user.name }}</h1>
+            <div class="role-badge">
+                {% if user.role == 'rural' %}
+                    🌾 Rural Producer
+                {% else %}
+                    🏙️ Urban Consumer
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="info-grid">
+            <div class="info-item">
+                <span class="info-label">Full Name</span>
+                <span class="info-value">{{ user.name }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Email Address</span>
+                <span class="info-value">{{ user.email }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">Phone Number</span>
+                <span class="info-value">{{ user.phone }}</span>
+            </div>
+            <div class="info-item">
+                <span class="info-label">State / Region</span>
+                <span class="info-value">{{ user.location }}</span>
+            </div>
+            
+            <div class="info-item">
+                {% if user.role == 'rural' %}
+                    <span class="info-label">Village Name</span>
+                    <span class="info-value">{{ user.village if user.village else 'Not Specified' }}</span>
+                {% else %}
+                    <span class="info-label">City Name</span>
+                    <span class="info-value">{{ user.city if user.city else 'Not Specified' }}</span>
+                {% endif %}
+            </div>
+
+            <div class="info-item">
+                <span class="info-label">Account Status</span>
+                <span class="info-value" style="color: #27ae60;">● Active Member</span>
+            </div>
+        </div>
+
+        <div class="profile-actions">
+            <a href="{{ url_for('edit_profile') }}" style="background: #27ae60; color: white; padding: 10px 20px; border-radius: 5px; text-decoration: none;">Edit Profile</a>
+           <a href="{{ url_for('dashboard', user_id=user.id) }}" class="btn-back">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+
+<style>
+    /* 100% CLEAN CSS - NO JINJA HERE */
+    :root {
+        --profile-bg: #ffffff;
+        --accent-main: #27ae60;
+        --accent-secondary: #2ecc71;
+        --card-shadow: rgba(0, 0, 0, 0.1);
+        --header-gradient: linear-gradient(135deg, #27ae60 0%, #219150 100%);
+        --pattern-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .profile-container {
+        max-width: 850px;
+        margin: 120px auto;
+        padding: 0 20px;
+    }
+
+    .profile-card {
+        background: white;
+        border-radius: 30px;
+        overflow: hidden;
+        box-shadow: 0 25px 50px -12px var(--card-shadow);
+        border: 1px solid rgba(0,0,0,0.03);
+    }
+
+    .profile-header {
+        background: var(--header-gradient);
+        padding: 50px 40px;
+        color: white;
+        text-align: center;
+    }
+
+    .avatar-circle {
+        width: 90px;
+        height: 90px;
+        background: white;
+        color: var(--accent-main);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 2.2rem;
+        font-weight: 800;
+        margin: 0 auto 20px;
+    }
+
+    .role-badge {
+        display: inline-block;
+        padding: 8px 20px;
+        background: rgba(255,255,255,0.15);
+        border-radius: 50px;
+        font-size: 0.9rem;
+    }
+
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        padding: 50px 40px;
+    }
+
+    .info-item {
+        padding: 15px;
+        background: #fcfcfc;
+        border-radius: 15px;
+        border: 1px solid #f0f0f0;
+    }
+
+    .info-label {
+        font-size: 0.75rem;
+        color: #94a3b8;
+        text-transform: uppercase;
+        font-weight: 800;
+        display: block;
+    }
+
+    .info-value {
+        font-size: 1.1rem;
+        color: #1e293b;
+        font-weight: 600;
+    }
+
+    .profile-actions {
+        padding: 0 40px 40px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .btn-edit {
+        background: var(--accent-main);
+        color: white;
+        padding: 14px 35px;
+        border-radius: 15px;
+        text-decoration: none;
+        font-weight: 700;
+    }
+
+    .btn-back {
+        color: #64748b;
+        text-decoration: none;
+        font-weight: 600;
+    }
+</style>
+
+<script>
+    /* THIS JAVASCRIPT HANDLES THE THEME WITHOUT BREAKING CSS RULES */
+    const userRole = "{{ user.role }}";
+    const root = document.documentElement;
+
+    if (userRole === 'rural') {
+        // Rural Theme: Earthy Greens
+        root.style.setProperty('--profile-bg', '#fdfbf7');
+        root.style.setProperty('--accent-main', '#6B8E23');
+        root.style.setProperty('--card-shadow', 'rgba(107, 142, 35, 0.15)');
+        root.style.setProperty('--header-gradient', 'linear-gradient(135deg, #6B8E23 0%, #556B2F 100%)');
+    } else {
+        // Urban Theme: Professional Navy
+        root.style.setProperty('--profile-bg', '#f8faff');
+        root.style.setProperty('--accent-main', '#2c3e50');
+        root.style.setProperty('--card-shadow', 'rgba(44, 62, 80, 0.15)');
+        root.style.setProperty('--header-gradient', 'linear-gradient(135deg, #2c3e50 0%, #34495e 100%)');
+    }
+</script>
+{% endblock %}

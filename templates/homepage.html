@@ -1,0 +1,300 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Urban Rural Connector{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/homepage.css') }}">
+<style>
+    /* HERO SECTION WITH BACKGROUND IMAGE */
+    .hero {
+        margin-top: 70px; /* Pushes the section down to prevent logo cutting */
+        padding: 100px 0;
+        /* The background image logic is perfect here */
+        background: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), 
+                    url("{{ url_for('static', filename='images/hero-bg.png') }}") no-repeat center center !important;
+        background-size: cover !important; /* This makes the photo fill the whole screen */
+        color: white; 
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+    }
+
+    .hero-title {
+        font-size: 3.5rem !important;
+        font-weight: 800;
+        line-height: 1.2;
+        margin-bottom: 20px;
+        text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+    }
+
+    .highlight {
+        color: #FFD700; /* Standard Golden Yellow for 'Roots' and 'Routes' in Title */
+        text-decoration: underline;
+        font-weight: 700;
+    }
+
+    .hero-subtitle {
+        font-size: 1.4rem;
+        font-weight: 500;
+        line-height: 1.6;
+        margin-bottom: 30px;
+        max-width: 800px;
+    }
+
+    /* SPECIFIC COLOR RULES FOR THE MISSION STATEMENT */
+    
+    /* White Text lines (Line 1 and Line 3) */
+    .white-mission-line {
+        color: #FFFFFF !important;
+        text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+    }
+
+    /* GOLDEN YELLOW Text line (Line 2) */
+    .gold-mission-line {
+        color: #FFD700 !important; /* Golden Yellow for the most important part */
+        font-weight: 800;
+    }
+
+    /* Ensuring Navbar buttons match the Hero theme */
+    .btn-primary {
+        background-color: #27ae60 !important;
+        border-color: #27ae60 !important;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                Building a Bridge of Trust<br>
+                Between India's <span class="highlight">Roots</span> and <span class="highlight">Routes</span>
+            </h1>
+            
+            <p class="hero-subtitle">
+                <span class="white-mission-line">Connecting rural producers directly with urban consumers.</span><br>
+                <span class="gold-mission-line">No middlemen. No exploitation.</span><br>
+                <span class="white-mission-line">Just honest trade and dignity.</span>
+            </p>
+            
+            <div class="hero-actions">
+                <button class="btn btn-large btn-primary" onclick="location.href='/signup'">
+                    Start Your Journey
+                </button>
+                <button class="btn btn-large btn-outline-light" onclick="document.getElementById('how-it-works').scrollIntoView({behavior: 'smooth'})">
+                    Learn More
+                </button>
+            </div>
+        </div>
+        
+        </div>
+</section>
+
+<section class="how-it-works" id="how-it-works">
+    <div class="container">
+        <h2 class="section-title">How It Works</h2>
+        <p class="section-subtitle">Two Worlds, One Platform</p>
+        
+        <div class="dual-ecosystem">
+            <div class="profile-card rural">
+                <div class="profile-icon">
+                    <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                        <circle cx="32" cy="32" r="32" fill="#6B8E23"/>
+                        <path d="M32 16C24.268 16 18 22.268 18 30C18 37.732 24.268 44 32 44C39.732 44 46 37.732 46 30C46 22.268 39.732 16 32 16ZM32 26C33.657 26 35 27.343 35 29C35 30.657 33.657 32 32 32C30.343 32 29 30.657 29 29C29 27.343 30.343 26 32 26ZM32 40.4C28.5 40.4 25.43 38.53 23.8 35.74C23.84 32.9 29.6 31.35 32 31.35C34.39 31.35 40.16 32.9 40.2 35.74C38.57 38.53 35.5 40.4 32 40.4Z" fill="white"/>
+                    </svg>
+                </div>
+                <h3 class="profile-title">Rural Seller</h3>
+                <p class="profile-description">Farmers & Artisans from villages across India</p>
+                
+                <ul class="profile-features">
+                    <li>
+                        <span class="feature-icon">✓</span>
+                        Create your profile with Aadhaar verification
+                    </li>
+                    <li>
+                        <span class="feature-icon">✓</span>
+                        List products with your story & daily life
+                    </li>
+                    <li>
+                        <span class="feature-icon">✓</span>
+                        Get fair prices without middlemen
+                    </li>
+                    <li>
+                        <span class="feature-icon">✓</span>
+                        Receive direct payments to your account
+                    </li>
+                </ul>
+                
+                <button class="btn btn-primary-green" onclick="location.href='/signup?role=rural'">
+                    Join as Seller
+                </button>
+            </div>
+            
+            <div class="profile-card urban">
+                <div class="profile-icon">
+                    <svg width="64" height="64" viewBox="0 0 64 64" fill="none">
+                        <circle cx="32" cy="32" r="32" fill="#8B4513"/>
+                        <path d="M44 20H38V18C38 15.79 36.21 14 34 14H30C27.79 14 26 15.79 26 18V20H20C17.79 20 16 21.79 16 24V44C16 46.21 17.79 48 20 48H44C46.21 48 48 46.21 48 44V24C48 21.79 46.21 20 44 20ZM30 18H34V20H30V18ZM32 38C28.69 38 26 35.31 26 32C26 28.69 28.69 26 32 26C35.31 26 38 28.69 38 32C38 35.31 35.31 38 32 38Z" fill="white"/>
+                    </svg>
+                </div>
+                <h3 class="profile-title">Urban Buyer</h3>
+                <p class="profile-description">Conscious consumers from cities</p>
+                
+                <ul class="profile-features">
+                    <li>
+                        <span class="feature-icon">✓</span>
+                        Shop authentic products with verified origins
+                    </li>
+                    <li>
+                        <span class="feature-icon">✓</span>
+                        Know the story behind what you buy
+                    </li>
+                    <li>
+                        <span class="feature-icon">✓</span>
+                        Support rural livelihoods directly
+                    </li>
+                    <li>
+                        <span class="feature-icon">✓</span>
+                        Track your social impact
+                    </li>
+                </ul>
+                
+                <button class="btn btn-primary-brown" onclick="location.href='/signup?role=urban'">
+                    Join as Buyer
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="featured-stories">
+    <div class="container">
+        <h2 class="section-title">Featured Real Stories</h2>
+        <p class="section-subtitle">Meet the producers behind your products</p>
+        
+        <div class="stories-grid">
+            {% if featured_sellers %}
+                {% for seller in featured_sellers %}
+                <div class="story-card">
+                    <div class="story-image">
+                        <img src="{{ url_for('static', filename='images/sample-farmer.jpg') }}" alt="{{ seller.name }}">
+                        {% if seller.aadhaar_verified %}
+                        <div class="verified-badge">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <circle cx="10" cy="10" r="10" fill="#4CAF50"/>
+                                <path d="M8 10.5L9.5 12L12.5 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            URC Verified
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="story-content">
+                        <h3 class="story-name">{{ seller.name }}</h3>
+                        <p class="story-location">📍 {{ seller.village }}, {{ seller.location }}</p>
+                        <p class="story bio">
+                            "Growing organic produce for three generations. Our farm is our pride."
+                        </p>
+                        <button class="btn btn-small btn-outline" onclick="location.href='/dashboard/{{ seller.id }}'">
+                            View Profile
+                        </button>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="story-card">
+                    <div class="story-image">
+                        <img src="{{ url_for('static', filename='images/sample-farmer.jpg') }}" alt="Ramesh Kumar">
+                        <div class="verified-badge">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <circle cx="10" cy="10" r="10" fill="#4CAF50"/>
+                                <path d="M8 10.5L9.5 12L12.5 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            URC Verified
+                        </div>
+                    </div>
+                    <div class="story-content">
+                        <h3 class="story-name">Ramesh Kumar</h3>
+                        <p class="story-location">📍 Pipraich, Uttar Pradesh</p>
+                        <p class="story-bio">
+                            "Growing organic basmati rice for three generations. Our farm is our pride."
+                        </p>
+                        <button class="btn btn-small btn-outline">View Profile</button>
+                    </div>
+                </div>
+                
+                <div class="story-card">
+                    <div class="story-image">
+                        <img src="{{ url_for('static', filename='images/sample-artisan.jpg') }}" alt="Lakshmi Devi">
+                        <div class="verified-badge">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <circle cx="10" cy="10" r="10" fill="#4CAF50"/>
+                                <path d="M8 10.5L9.5 12L12.5 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            URC Verified
+                        </div>
+                    </div>
+                    <div class="story-content">
+                        <h3 class="story-name">Lakshmi Devi</h3>
+                        <p class="story-location">📍 Sanganer, Rajasthan</p>
+                        <p class="story-bio">
+                            "Hand-block printing textiles using 200-year-old family techniques."
+                        </p>
+                        <button class="btn btn-small btn-outline">View Profile</button>
+                    </div>
+                </div>
+                
+                <div class="story-card">
+                    <div class="story-image">
+                        <img src="{{ url_for('static', filename='images/sample-dairy.jpg') }}" alt="Suresh Patel">
+                        <div class="verified-badge">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                <circle cx="10" cy="10" r="10" fill="#4CAF50"/>
+                                <path d="M8 10.5L9.5 12L12.5 9" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                            URC Verified
+                        </div>
+                    </div>
+                    <div class="story-content">
+                        <h3 class="story-name">Suresh Patel</h3>
+                        <p class="story-location">📍 Anand, Gujarat</p>
+                        <p class="story-bio">
+                            "Fresh dairy from our cooperative. Pure milk, ghee, and paneer daily."
+                        </p>
+                        <button class="btn btn-small btn-outline">View Profile</button>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<footer class="footer">
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Urban Rural Connector</h4>
+                <p>Building bridges of trust between India's villages and cities.</p>
+            </div>
+            <div class="footer-section">
+                <h4>Quick Links</h4>
+                <ul>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="/shop">Shop</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h4>Contact</h4>
+                <p>Email: support@urbanruralconnector.in</p>
+                <p>Phone: +91 1800-XXX-XXXX</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2026 Urban Rural Connector India. Bridging India's Roots and Routes</p>
+        </div>
+    </div>
+</footer>
+
+{% endblock %}

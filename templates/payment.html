@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container" style="max-width: 500px; margin: 50px auto; text-align: center; background: white; padding: 30px; border-radius: 15px; box-shadow: var(--shadow);">
+    <h2>Secure Payment</h2>
+    <p>Amount to Pay: <strong style="color: var(--primary-green);">₹{{ total }}</strong></p>
+    <div style="background: #f9f9f9; padding: 20px; border-radius: 10px; margin: 20px 0;">
+        <p>💳 Dummy Payment Gateway</p>
+        <input type="text" placeholder="Card Number" style="width: 90%; padding: 10px; margin-bottom: 10px;">
+    </div>
+    <form action="{{ url_for('process_payment') }}" method="POST">
+        <button type="submit" class="btn-nav btn-signup" style="width: 100%; border: none; cursor: pointer;">Pay Now</button>
+    </form>
+</div>
+{% endblock %}

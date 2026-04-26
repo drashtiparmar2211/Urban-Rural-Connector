@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>URC Transport & Logistics</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=IBM+Plex+Mono:wght@400;500&family=Karla:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+/* ── CSS Variables ─────────────────────────────────────────── */
+:root{
+  --bg:#0a0f0d;
+  --surface:#111a16;
+  --card:#16231c;
+  --border:#1e3028;
+  --accent:#2ecc71;
+  --accent2:#f0a500;
+  --accent3:#e74c3c;
+  --text:#e8f5ee;
+  --muted:#6b8f7a;
+  --radius:12px;
+  --font-head:'Syne',sans-serif;
+  --font-mono:'IBM Plex Mono',monospace;
+  --font-body:'Karla',sans-serif;
+}
+
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--text);font-family:var(--font-body);min-height:100vh;font-size:15px}
+
+/* ── Layout ────────────────────────────────────────────────── */
+.app{display:grid;grid-template-rows:auto 1fr;min-height:100vh}
+
+/* ── Header ─────────────────────────────────────────────────  */
+header{
+  background:var(--surface);
+  border-bottom:1px solid var(--border);
+  padding:0 2rem;
+  display:flex;align-items:center;justify-content:space-between;
+  height:62px;position:sticky;top:0;z-index:100;
+}
+.logo{font-family:var(--font-head);font-size:1.25rem;font-weight:800;letter-spacing:-.5px}
+.logo span{color:var(--accent)}
+.logo em{color:var(--accent2);font-style:normal}
+.api-status{display:flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:.72rem;color:var(--muted)}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--accent);box-shadow:0 0 8px var(--accent);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+
+/* ── Nav ─────────────────────────────────────────────────────  */
+nav{display:flex;gap:4px}
+.nav-btn{
+  background:none;border:none;color:var(--muted);padding:8px 14px;
+  border-radius:8px;cursor:pointer;font-family:var(--font-body);font-size:.85rem;
+  font-weight:600;transition:.2s;letter-spacing:.3px;
+}
+.nav-btn:hover{color:var(--text);background:var(--border)}
+.nav-btn.active{color:var(--accent);background:rgba(46,204,113,.1)}
+
+/* ── Main ────────────────────────────────────────────────────  */
+main{padding:2rem;max-width:1280px;margin:0 auto;width:100%}
+
+/* ── Section ─────────────────────────────────────────────────  */
+.section{display:none}
+.section.active{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Page Title ──────────────────────────────────────────────  */
+.page-title{
+  font-family:var(--font-head);font-size:2rem;font-weight:800;
+  margin-bottom:1.5rem;line-height:1.1;
+}
+.page-title span{color:var(--accent)}
+.sub{color:var(--muted);font-size:.9rem;font-weight:400;margin-top:.3rem;display:block}
+
+/* ── Stats Grid ──────────────────────────────────────────────  */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:1rem;margin-bottom:2rem}
+.stat-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.2rem;position:relative;overflow:hidden;
+}
+.stat-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:linear-gradient(90deg,var(--accent),transparent);
+}
+.stat-val{font-family:var(--font-head);font-size:2rem;font-weight:800;color:var(--accent);line-height:1}
+.stat-label{font-size:.78rem;color:var(--muted);margin-top:.4rem;font-family:var(--font-mono)}
+
+/* ── Cards ───────────────────────────────────────────────────  */
+.card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.4rem;transition:.2s;
+}
+.card:hover{border-color:rgba(46,204,113,.3)}
+
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1.2rem}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}
+@media(max-width:900px){.grid-2,.grid-3{grid-template-columns:1fr}}
+
+/* ── Product Grid ────────────────────────────────────────────  */
+.products-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:1rem}
+.product-card{
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.3rem;cursor:pointer;transition:.2s;
+}
+.product-card:hover{border-color:var(--accent);transform:translateY(-2px)}
+.product-name{font-family:var(--font-head);font-size:1.05rem;font-weight:700;margin-bottom:.4rem}
+.product-meta{font-family:var(--font-mono);font-size:.72rem;color:var(--muted)}
+.product-price{font-size:1.3rem;font-weight:800;color:var(--accent2);margin:.6rem 0}
+.tier-badge{
+  display:inline-block;padding:3px 10px;border-radius:20px;
+  font-size:.7rem;font-weight:600;font-family:var(--font-mono);letter-spacing:.5px;
+}
+.tier-1{background:rgba(231,76,60,.15);color:#e74c3c;border:1px solid rgba(231,76,60,.3)}
+.tier-2{background:rgba(240,165,0,.15);color:var(--accent2);border:1px solid rgba(240,165,0,.3)}
+.tier-3{background:rgba(46,204,113,.15);color:var(--accent);border:1px solid rgba(46,204,113,.3)}
+
+/* ── Delivery Options ────────────────────────────────────────  */
+.delivery-options{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin:1.5rem 0}
+@media(max-width:700px){.delivery-options{grid-template-columns:1fr}}
+.delivery-card{
+  border:2px solid var(--border);border-radius:var(--radius);padding:1.3rem;
+  cursor:pointer;transition:.2s;background:var(--card);
+}
+.delivery-card:hover{border-color:var(--accent)}
+.delivery-card.selected{border-color:var(--accent);background:rgba(46,204,113,.07)}
+.delivery-card.disabled{opacity:.4;cursor:not-allowed}
+.delivery-icon{font-size:2rem;margin-bottom:.7rem}
+.delivery-title{font-family:var(--font-head);font-weight:700;font-size:1rem;margin-bottom:.4rem}
+.delivery-cost{color:var(--accent2);font-weight:700;font-size:.9rem;margin:.4rem 0}
+.delivery-desc{font-size:.8rem;color:var(--muted);line-height:1.4}
+
+/* ── Progress Bar ────────────────────────────────────────────  */
+.progress-wrap{background:var(--border);border-radius:20px;height:10px;overflow:hidden;margin:.8rem 0}
+.progress-bar{
+  height:100%;border-radius:20px;
+  background:linear-gradient(90deg,var(--accent),#27ae60);
+  transition:width .6s ease;
+}
+.progress-label{font-family:var(--font-mono);font-size:.75rem;color:var(--muted)}
+
+/* ── Form ────────────────────────────────────────────────────  */
+.form-group{margin-bottom:1rem}
+label{display:block;font-size:.78rem;font-family:var(--font-mono);color:var(--muted);margin-bottom:.4rem;letter-spacing:.5px;text-transform:uppercase}
+input,select,textarea{
+  width:100%;background:var(--surface);border:1px solid var(--border);
+  color:var(--text);border-radius:8px;padding:.7rem .9rem;
+  font-family:var(--font-body);font-size:.9rem;outline:none;transition:.2s;
+}
+input:focus,select:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(46,204,113,.1)}
+select option{background:var(--surface)}
+
+/* ── Buttons ─────────────────────────────────────────────────  */
+.btn{
+  display:inline-flex;align-items:center;gap:.5rem;
+  padding:.7rem 1.4rem;border-radius:8px;font-weight:700;cursor:pointer;
+  font-size:.85rem;border:none;transition:.2s;font-family:var(--font-body);
+  letter-spacing:.3px;
+}
+.btn-primary{background:var(--accent);color:#0a0f0d}
+.btn-primary:hover{background:#27ae60;transform:translateY(-1px)}
+.btn-outline{background:none;border:1px solid var(--border);color:var(--text)}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent)}
+.btn-danger{background:rgba(231,76,60,.15);border:1px solid rgba(231,76,60,.3);color:#e74c3c}
+.btn-warn{background:rgba(240,165,0,.15);border:1px solid rgba(240,165,0,.3);color:var(--accent2)}
+.btn-sm{padding:.4rem .9rem;font-size:.78rem}
+
+/* ── OTP Display ─────────────────────────────────────────────  */
+.otp-box{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1.2rem;margin:.8rem 0;
+}
+.otp-code{
+  font-family:var(--font-mono);font-size:2.2rem;font-weight:500;
+  letter-spacing:.5rem;color:var(--accent);text-align:center;
+  padding:.8rem;background:rgba(46,204,113,.05);border-radius:8px;margin:.5rem 0;
+}
+.otp-type{font-size:.75rem;color:var(--muted);font-family:var(--font-mono);text-transform:uppercase}
+
+/* ── Map Placeholder ─────────────────────────────────────────  */
+.map-embed{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);
+  height:240px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:.8rem;color:var(--muted);font-family:var(--font-mono);font-size:.8rem;
+}
+.map-embed .map-icon{font-size:2.5rem}
+
+/* ── Status Badge ────────────────────────────────────────────  */
+.status{
+  display:inline-block;padding:3px 10px;border-radius:20px;
+  font-size:.72rem;font-weight:600;font-family:var(--font-mono);
+}
+.status-confirmed{background:rgba(46,204,113,.1);color:var(--accent);border:1px solid rgba(46,204,113,.25)}
+.status-pending{background:rgba(240,165,0,.1);color:var(--accent2);border:1px solid rgba(240,165,0,.25)}
+.status-delivered{background:rgba(52,152,219,.1);color:#3498db;border:1px solid rgba(52,152,219,.25)}
+.status-in_transit{background:rgba(155,89,182,.1);color:#9b59b6;border:1px solid rgba(155,89,182,.25)}
+
+/* ── Driver Card ─────────────────────────────────────────────  */
+.driver-card{
+  display:flex;align-items:center;gap:1rem;
+  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
+  padding:1rem 1.2rem;
+}
+.driver-avatar{
+  width:48px;height:48px;border-radius:50%;background:rgba(46,204,113,.1);
+  border:2px solid var(--accent);display:flex;align-items:center;justify-content:center;
+  font-size:1.2rem;flex-shrink:0;
+}
+.driver-name{font-weight:700;font-size:.95rem}
+.driver-details{font-family:var(--font-mono);font-size:.72rem;color:var(--muted);margin-top:.2rem}
+
+/* ── Section Header ──────────────────────────────────────────  */
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem}
+.section-title{font-family:var(--font-head);font-size:1.1rem;font-weight:700}
+
+/* ── Order Row ───────────────────────────────────────────────  */
+.order-row{
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;
+  padding:1rem 1.2rem;background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);margin-bottom:.7rem;
+}
+
+/* ── Toast ───────────────────────────────────────────────────  */
+#toast{
+  position:fixed;bottom:1.5rem;right:1.5rem;z-index:999;
+  background:var(--surface);border:1px solid var(--accent);color:var(--text);
+  padding:.8rem 1.3rem;border-radius:10px;font-size:.85rem;
+  opacity:0;transform:translateY(10px);transition:.3s;pointer-events:none;
+  font-family:var(--font-mono);max-width:320px;
+}
+#toast.show{opacity:1;transform:translateY(0)}
+.toast-success{border-color:var(--accent)!important}
+.toast-error{border-color:#e74c3c!important;color:#e74c3c}
+
+/* ── Loader ──────────────────────────────────────────────────  */
+.loader{display:flex;align-items:center;justify-content:center;padding:3rem;color:var(--muted);font-family:var(--font-mono);font-size:.85rem;gap:.8rem}
+.spinner{width:20px;height:20px;border:2px solid var(--border);border-top-color:var(--accent);border-radius:50%;animation:spin .6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+
+/* ── Misc ────────────────────────────────────────────────────  */
+.divider{border:none;border-top:1px solid var(--border);margin:1.2rem 0}
+.hint{font-size:.78rem;color:var(--muted);font-family:var(--font-mono)}
+.strong{font-weight:700;color:var(--text)}
+.text-accent{color:var(--accent)}
+.text-warn{color:var(--accent2)}
+.text-danger{color:#e74c3c}
+.mt-1{margin-top:.5rem}.mt-2{margin-top:1rem}.mt-3{margin-top:1.5rem}
+.flex{display:flex;align-items:center}.gap-1{gap:.5rem}.gap-2{gap:1rem}
+.w-full{width:100%}
+.pickup-token{
+  font-family:var(--font-mono);background:var(--surface);
+  border:1px dashed var(--border);border-radius:8px;
+  padding:.8rem 1.2rem;letter-spacing:.2em;color:var(--accent2);font-size:1.1rem;
+  text-align:center;margin:.8rem 0;
+}
+</style>
+</head>
+<body>
+<div class="app">
+
+<!-- ── Header ─────────────────────────────────────────── -->
+<header>
+  <div class="logo">URC <span>Transport</span> &amp; <em>Logistics</em></div>
+  <nav>
+    <button class="nav-btn active" onclick="showSection('dashboard')">Dashboard</button>
+    <button class="nav-btn" onclick="showSection('products')">Marketplace</button>
+    <button class="nav-btn" onclick="showSection('order')">Place Order</button>
+    <button class="nav-btn" onclick="showSection('tracking')">Track</button>
+    <button class="nav-btn" onclick="showSection('backhaul')">Return Trips</button>
+    <button class="nav-btn" onclick="showSection('verify')">Verify OTP</button>
+  </nav>
+  <div class="api-status"><div class="dot"></div> API Connected</div>
+</header>
+
+<main>
+
+<!-- ══ DASHBOARD ═══════════════════════════════════════ -->
+<div class="section active" id="s-dashboard">
+  <h1 class="page-title">Operations <span>Overview</span>
+    <span class="sub">Real-time logistics intelligence</span>
+  </h1>
+  <div class="stats-grid" id="stats-grid">
+    <div class="loader"><div class="spinner"></div>Loading…</div>
+  </div>
+
+  <div class="grid-2" style="margin-top:1.5rem">
+    <div class="card">
+      <div class="section-header">
+        <div class="section-title">Active Group Pools</div>
+        <button class="btn btn-outline btn-sm" onclick="loadGroups()">↻ Refresh</button>
+      </div>
+      <div id="groups-list"><div class="loader"><div class="spinner"></div>Loading…</div></div>
+    </div>
+    <div class="card">
+      <div class="section-header">
+        <div class="section-title">Available Drivers</div>
+      </div>
+      <div id="drivers-list"><div class="loader"><div class="spinner"></div>Loading…</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PRODUCTS ════════════════════════════════════════ -->
+<div class="section" id="s-products">
+  <h1 class="page-title">Farm <span>Marketplace</span>
+    <span class="sub">Fresh produce direct from rural producers</span>
+  </h1>
+  <div class="products-grid" id="products-grid">
+    <div class="loader"><div class="spinner"></div>Loading products…</div>
+  </div>
+</div>
+
+<!-- ══ PLACE ORDER ═════════════════════════════════════ -->
+<div class="section" id="s-order">
+  <h1 class="page-title">Place <span>Order</span>
+    <span class="sub">Choose product, delivery method, and confirm</span>
+  </h1>
+
+  <div class="grid-2">
+    <!-- Left: Order Form -->
+    <div>
+      <div class="card">
+        <div class="form-group">
+          <label>Select Product</label>
+          <select id="order-product" onchange="onProductChange()">
+            <option value="">— Choose a product —</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Buyer ID</label>
+          <input id="order-buyer" type="number" value="1" min="1"/>
+          <div class="hint mt-1">Demo buyers: ID 1 = Anita Shah, ID 2 = Mihir Joshi</div>
+        </div>
+        <div class="form-group">
+          <label>Quantity</label>
+          <input id="order-qty" type="number" value="2" min="1"/>
+        </div>
+        <div class="form-group">
+          <label>Your GPS (Lat)</label>
+          <input id="order-lat" type="number" step="0.0001" value="22.3072"/>
+        </div>
+        <div class="form-group">
+          <label>Your GPS (Lng)</label>
+          <input id="order-lng" type="number" step="0.0001" value="73.1812"/>
+        </div>
+      </div>
+
+      <!-- Delivery Options -->
+      <div class="mt-2">
+        <div class="section-title" style="margin-bottom:.8rem">Choose Delivery Method</div>
+        <div class="delivery-options" id="delivery-opts">
+          <div style="grid-column:1/-1;color:var(--muted);font-size:.85rem;font-family:var(--font-mono)">
+            Select a product to see available delivery options.
+          </div>
+        </div>
+      </div>
+
+      <button class="btn btn-primary w-full mt-2" onclick="placeOrder()">
+        ✓ Confirm Order
+      </button>
+    </div>
+
+    <!-- Right: Order Preview -->
+    <div>
+      <div class="card" id="product-preview">
+        <div style="color:var(--muted);font-family:var(--font-mono);font-size:.85rem">
+          Select a product to see details and delivery quote.
+        </div>
+      </div>
+
+      <div class="card mt-2" id="order-result" style="display:none">
+        <div class="section-title text-accent mb-1">✓ Order Placed!</div>
+        <div id="order-result-body"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ TRACKING ════════════════════════════════════════ -->
+<div class="section" id="s-tracking">
+  <h1 class="page-title">Order <span>Tracking</span>
+    <span class="sub">Real-time status and driver location</span>
+  </h1>
+  <div class="grid-2">
+    <div>
+      <div class="card">
+        <div class="form-group">
+          <label>Order ID</label>
+          <input id="track-order-id" type="number" placeholder="Enter order ID"/>
+        </div>
+        <button class="btn btn-primary" onclick="trackOrder()">Track Order</button>
+      </div>
+      <div id="track-result" class="mt-2"></div>
+    </div>
+    <div>
+      <div id="track-map" class="map-embed">
+        <div class="map-icon">🗺️</div>
+        <div>Enter an order ID to view live tracking</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ BACKHAUL ════════════════════════════════════════ -->
+<div class="section" id="s-backhaul">
+  <h1 class="page-title">Return Trip <span>Bookings</span>
+    <span class="sub">Back-haul supplies from city to village at 30–50% discount</span>
+  </h1>
+  <div class="grid-2">
+    <div class="card">
+      <div class="section-title" style="margin-bottom:1rem">Book a Return Load</div>
+      <div class="form-group">
+        <label>Farmer / Producer ID</label>
+        <input id="bh-producer" type="number" value="1"/>
+      </div>
+      <div class="form-group">
+        <label>Select Driver (Returning)</label>
+        <select id="bh-driver"></select>
+      </div>
+      <div class="form-group">
+        <label>Item Description</label>
+        <input id="bh-item" type="text" placeholder="e.g. Fertilizer 50kg bags"/>
+      </div>
+      <div class="form-group">
+        <label>Weight (kg)</label>
+        <input id="bh-weight" type="number" value="50"/>
+      </div>
+      <div class="form-group">
+        <label>Origin City</label>
+        <input id="bh-origin" type="text" value="Vadodara"/>
+      </div>
+      <div class="form-group">
+        <label>Destination Village</label>
+        <input id="bh-dest" type="text" placeholder="Your village name"/>
+      </div>
+      <div class="form-group">
+        <label>Scheduled Date</label>
+        <input id="bh-date" type="date"/>
+      </div>
+      <button class="btn btn-primary w-full" onclick="bookBackhaul()">Book Return Shipment</button>
+    </div>
+    <div>
+      <div class="card">
+        <div class="section-title" style="margin-bottom:1rem">🚛 Drivers Returning Today</div>
+        <div id="returning-drivers"><div class="loader"><div class="spinner"></div>Loading…</div></div>
+      </div>
+      <div class="card mt-2" id="bh-result" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ OTP VERIFY ══════════════════════════════════════ -->
+<div class="section" id="s-verify">
+  <h1 class="page-title">OTP <span>Verification</span>
+    <span class="sub">Dual-handshake security for pickups and deliveries</span>
+  </h1>
+  <div class="grid-2">
+    <div>
+      <div class="card">
+        <div class="section-title" style="margin-bottom:1.2rem">🔐 Verify OTP</div>
+        <div class="form-group">
+          <label>Order ID</label>
+          <input id="v-order-id" type="number" placeholder="Order ID"/>
+        </div>
+        <div class="form-group">
+          <label>OTP Type</label>
+          <select id="v-type">
+            <option value="pickup">Pickup OTP (Farmer → Driver)</option>
+            <option value="delivery">Delivery OTP (Buyer → Driver)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Enter OTP Code</label>
+          <input id="v-code" type="text" maxlength="6" placeholder="6-digit code"/>
+        </div>
+        <button class="btn btn-primary w-full" onclick="verifyOTP()">Verify OTP</button>
+        <hr class="divider"/>
+        <div class="hint">For demo: fetch OTPs using the lookup below</div>
+        <div class="form-group mt-2">
+          <label>Lookup OTPs for Order ID</label>
+          <div class="flex gap-1">
+            <input id="lookup-order-id" type="number" placeholder="Order ID"/>
+            <button class="btn btn-outline btn-sm" onclick="lookupOTPs()" style="white-space:nowrap">Get OTPs</button>
+          </div>
+        </div>
+        <div id="otp-lookup-result"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="section-title" style="margin-bottom:1.2rem">How Dual-OTP Works</div>
+      <div style="display:flex;flex-direction:column;gap:1.2rem">
+        <div style="border-left:3px solid var(--accent);padding-left:1rem">
+          <div class="strong">1. Pickup OTP</div>
+          <div class="hint mt-1">Farmer generates OTP → gives to Driver → Driver enters into app → Package released for transit</div>
+        </div>
+        <div style="border-left:3px solid var(--accent2);padding-left:1rem">
+          <div class="strong">2. Proof of Condition</div>
+          <div class="hint mt-1">Driver photographs product before loading → uploaded to order record → buyer can view pre-transit condition</div>
+        </div>
+        <div style="border-left:3px solid #3498db;padding-left:1rem">
+          <div class="strong">3. Delivery OTP</div>
+          <div class="hint mt-1">Buyer generates OTP → gives to Driver → Driver enters into app → Payment released → Order marked Delivered</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div id="v-result" class="mt-2"></div>
+</div>
+
+</main>
+</div><!-- /app -->
+
+<div id="toast"></div>
+
+<script>
+const API = "http://localhost:5000/api";
+let selectedDelivery = null;
+let selectedProductData = null;
+let allProducts = [];
+
+// ── Utils ────────────────────────────────────────────────────
+function toast(msg, type="success"){
+  const t=document.getElementById("toast");
+  t.textContent=msg;
+  t.className="show toast-"+type;
+  clearTimeout(t._timer);
+  t._timer=setTimeout(()=>t.className="",3000);
+}
+
+async function api(path, method="GET", body=null){
+  try{
+    const opts={method,headers:{"Content-Type":"application/json"}};
+    if(body) opts.body=JSON.stringify(body);
+    const r=await fetch(API+path,opts);
+    return await r.json();
+  }catch(e){
+    return {status:"error",message:e.message};
+  }
+}
+
+function fmtCost(c){ return c===0?"FREE":"₹"+Number(c).toFixed(2) }
+
+function tierBadge(t){
+  const labels={1:"INSTANT",2:"PRIORITY",3:"STANDARD"};
+  return `<span class="tier-badge tier-${t}">${labels[t]}</span>`;
+}
+
+function statusBadge(s){
+  return `<span class="status status-${s}">${s.replace("_"," ").toUpperCase()}</span>`;
+}
+
+// ── Navigation ───────────────────────────────────────────────
+function showSection(id){
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
+  document.getElementById("s-"+id).classList.add("active");
+  event.target.classList.add("active");
+  if(id==="dashboard") loadDashboard();
+  if(id==="products")  loadProducts();
+  if(id==="order")     populateProductSelect();
+  if(id==="backhaul")  loadBackhaul();
+}
+
+// ── Dashboard ────────────────────────────────────────────────
+async function loadDashboard(){
+  const [stats, groups, drivers] = await Promise.all([
+    api("/stats"), api("/groups"), api("/drivers")
+  ]);
+
+  const sg=document.getElementById("stats-grid");
+  if(stats.status==="ok"){
+    const d=stats.data;
+    sg.innerHTML=`
+      <div class="stat-card"><div class="stat-val">${d.total_orders}</div><div class="stat-label">Total Orders</div></div>
+      <div class="stat-card"><div class="stat-val">${d.delivered_orders}</div><div class="stat-label">Delivered</div></div>
+      <div class="stat-card"><div class="stat-val">${d.active_groups}</div><div class="stat-label">Active Groups</div></div>
+      <div class="stat-card"><div class="stat-val">${d.active_drivers}</div><div class="stat-label">Available Drivers</div></div>
+      <div class="stat-card"><div class="stat-val">${d.backhaul_bookings}</div><div class="stat-label">Back-haul Trips</div></div>
+      <div class="stat-card"><div class="stat-val" style="color:var(--accent2)">₹${d.total_revenue}</div><div class="stat-label">Revenue</div></div>`;
+  }
+
+  // Groups
+  const gl=document.getElementById("groups-list");
+  if(groups.status==="ok" && groups.data.length){
+    gl.innerHTML=groups.data.map(g=>{
+      const pct=Math.min(100,Math.round((g.joined/g.threshold)*100));
+      return `<div class="mb-2">
+        <div class="flex gap-1" style="justify-content:space-between;margin-bottom:.3rem">
+          <span class="strong">${g.product_name}</span>
+          <span class="hint">${g.joined}/${g.threshold} joined</span>
+        </div>
+        <div class="progress-wrap"><div class="progress-bar" style="width:${pct}%"></div></div>
+        <div class="hint">Cost: ₹${(g.total_cost/Math.max(g.joined,1)).toFixed(0)}/person · Expires: ${g.expires_at?.slice(0,16)}</div>
+      </div>`;
+    }).join("");
+  } else {
+    gl.innerHTML=`<div class="hint">No active groups right now.</div>`;
+  }
+
+  // Drivers
+  const dl=document.getElementById("drivers-list");
+  if(drivers.status==="ok"){
+    dl.innerHTML=drivers.data.map(d=>`
+      <div class="driver-card" style="margin-bottom:.7rem">
+        <div class="driver-avatar">${d.vehicle_type==="bike"?"🏍️":d.vehicle_type==="truck"?"🚛":"🛺"}</div>
+        <div>
+          <div class="driver-name">${d.name}</div>
+          <div class="driver-details">${d.vehicle_num} · ${d.vehicle_type.toUpperCase()} · ⭐ ${d.rating}</div>
+          <div class="driver-details">📍 ${d.gps_lat?.toFixed(4)}, ${d.gps_lng?.toFixed(4)}</div>
+        </div>
+        <span class="status status-confirmed" style="margin-left:auto">AVAILABLE</span>
+      </div>`).join("");
+  }
+}
+
+// ── Products ─────────────────────────────────────────────────
+async function loadProducts(){
+  const res=await api("/products");
+  const pg=document.getElementById("products-grid");
+  if(res.status!=="ok"||!res.data.length){
+    pg.innerHTML="<div class='hint'>No products available.</div>";
+    return;
+  }
+  allProducts=res.data;
+  pg.innerHTML=res.data.map(p=>`
+    <div class="product-card" onclick="goOrderProduct(${p.id})">
+      ${tierBadge(p.perishability)}
+      <div class="product-name" style="margin-top:.6rem">${p.name}</div>
+      <div class="product-meta">${p.category.toUpperCase()} · ${p.unit}</div>
+      <div class="product-price">₹${p.price_per_unit} / ${p.unit}</div>
+      <div class="product-meta">👨‍🌾 ${p.producer_name}</div>
+      <div class="product-meta" style="margin-top:.3rem">📦 ${p.stock} ${p.unit}s in stock</div>
+      <button class="btn btn-primary btn-sm" style="margin-top:.8rem;width:100%">Order Now →</button>
+    </div>`).join("");
+}
+
+// ── Order Flow ────────────────────────────────────────────────
+function goOrderProduct(id){
+  document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+  document.getElementById("s-order").classList.add("active");
+  document.querySelectorAll(".nav-btn").forEach(b=>b.classList.remove("active"));
+  document.querySelectorAll(".nav-btn")[2].classList.add("active");
+  populateProductSelect(id);
+}
+
+async function populateProductSelect(preselect=null){
+  if(!allProducts.length){
+    const res=await api("/products");
+    if(res.status==="ok") allProducts=res.data;
+  }
+  const sel=document.getElementById("order-product");
+  sel.innerHTML=`<option value="">— Choose a product —</option>`+
+    allProducts.map(p=>`<option value="${p.id}">${p.name} — ₹${p.price_per_unit}/${p.unit} (${p.producer_name})</option>`).join("");
+  if(preselect){ sel.value=preselect; onProductChange(); }
+}
+
+async function onProductChange(){
+  const pid=document.getElementById("order-product").value;
+  if(!pid){ document.getElementById("product-preview").innerHTML="<div class='hint'>Select a product to see details.</div>"; return; }
+
+  const [prod, opts] = await Promise.all([api(`/products/${pid}`), api(`/delivery/options/${pid}`)]);
+  if(prod.status!=="ok") return;
+  const p=prod.data;
+
+  document.getElementById("product-preview").innerHTML=`
+    ${tierBadge(p.perishability)}
+    <div class="product-name" style="margin-top:.8rem;font-family:var(--font-head);font-size:1.2rem">${p.name}</div>
+    <div class="product-meta">${p.category} · per ${p.unit}</div>
+    <div class="product-price" style="font-size:1.5rem">₹${p.price_per_unit}</div>
+    <hr class="divider"/>
+    <div class="hint">👨‍🌾 ${p.producer_name}</div>
+    <div class="hint">📍 ${p.address}</div>
+    <div class="hint">🗺️ ${p.landmark}</div>
+    <div class="hint">⭐ Rating: ${p.producer_rating}</div>
+    <div class="map-embed" style="margin-top:.8rem;height:160px">
+      <div class="map-icon">📍</div>
+      <div>GPS: ${p.gps_lat}, ${p.gps_lng}</div>
+      <a href="https://www.google.com/maps?q=${p.gps_lat},${p.gps_lng}" target="_blank"
+         class="btn btn-outline btn-sm" style="text-decoration:none">🗺️ Navigate to Farm</a>
+    </div>`;
+
+  selectedProductData=p;
+  renderDeliveryOptions(opts.data?.options||[]);
+}
+
+function renderDeliveryOptions(options){
+  const icons={self:"🚶",group:"👥",standard:"🚀"};
+  document.getElementById("delivery-opts").innerHTML=options.map(o=>`
+    <div class="delivery-card${o.available?" ":" disabled"}${selectedDelivery===o.type?" selected":""}"
+         onclick="${o.available?`selectDelivery('${o.type}',this)`:''}"
+         id="dc-${o.type}">
+      <div class="delivery-icon">${icons[o.type]||"📦"}</div>
+      <div class="delivery-title">${o.label}</div>
+      <div class="delivery-cost">${typeof o.cost==="number"?fmtCost(o.cost):o.cost}</div>
+      <div class="delivery-desc">${o.description}</div>
+      ${o.group_info?`
+        <div style="margin-top:.8rem">
+          <div class="progress-label">${o.group_info.joined}/${o.threshold} joined</div>
+          <div class="progress-wrap"><div class="progress-bar" style="width:${Math.min(100,(o.group_info.joined/o.threshold)*100)}%"></div></div>
+        </div>`:
+      (o.type==="group"?`<div class="hint" style="margin-top:.6rem">No active group — you'll start one!</div>`:"")}
+    </div>`).join("");
+}
+
+function selectDelivery(type, el){
+  document.querySelectorAll(".delivery-card").forEach(c=>c.classList.remove("selected"));
+  el.classList.add("selected");
+  selectedDelivery=type;
+}
+
+async function placeOrder(){
+  const pid=document.getElementById("order-product").value;
+  const bid=document.getElementById("order-buyer").value;
+  const qty=document.getElementById("order-qty").value;
+  if(!pid||!bid||!qty||!selectedDelivery){
+    toast("Please fill all fields and select a delivery method","error"); return;
+  }
+  const payload={
+    buyer_id:parseInt(bid), product_id:parseInt(pid),
+    quantity:parseInt(qty), delivery_type:selectedDelivery,
+    buyer_lat:parseFloat(document.getElementById("order-lat").value),
+    buyer_lng:parseFloat(document.getElementById("order-lng").value),
+  };
+  const res=await api("/orders","POST",payload);
+  if(res.status!=="ok"){toast(res.message,"error");return;}
+
+  const o=res.data;
+  const resultDiv=document.getElementById("order-result");
+  resultDiv.style.display="block";
+  document.getElementById("order-result-body").innerHTML=`
+    <div class="flex gap-2 mb-1" style="flex-wrap:wrap">
+      <div><span class="hint">ORDER ID</span><div class="strong">#${o.id}</div></div>
+      <div><span class="hint">TYPE</span><div class="strong">${o.delivery_type.toUpperCase()}</div></div>
+      <div><span class="hint">STATUS</span>${statusBadge(o.status)}</div>
+    </div>
+    <hr class="divider"/>
+    <div class="flex gap-2" style="flex-wrap:wrap;margin-bottom:.8rem">
+      <div><span class="hint">PRODUCT COST</span><div class="text-accent strong">₹${o.total_price}</div></div>
+      <div><span class="hint">DELIVERY</span><div class="text-warn strong">${fmtCost(o.delivery_cost)}</div></div>
+      ${o.distance_km?`<div><span class="hint">DISTANCE</span><div class="strong">${o.distance_km} km</div></div>`:""}
+    </div>
+    ${o.pickup_id?`<div class="hint">PICKUP TOKEN</div><div class="pickup-token">${o.pickup_id}</div>`:""}
+    ${o.delivery_type!=="self"?`<button class="btn btn-outline btn-sm" onclick="document.getElementById('lookup-order-id').value=${o.id};showSection('verify');document.querySelectorAll('.nav-btn')[5].classList.add('active')">🔐 View OTPs →</button>`:""}
+    <button class="btn btn-outline btn-sm" style="margin-left:.5rem" onclick="document.getElementById('track-order-id').value=${o.id};showSection('tracking');document.querySelectorAll('.nav-btn')[3].classList.add('active');trackOrder()">📍 Track Order →</button>`;
+  toast("Order placed! ID #"+o.id);
+}
+
+// ── Tracking ─────────────────────────────────────────────────
+async function trackOrder(){
+  const id=document.getElementById("track-order-id").value;
+  if(!id){toast("Enter an order ID","error");return;}
+  const res=await api("/orders/"+id);
+  if(res.status!=="ok"){toast(res.message,"error");return;}
+  const o=res.data;
+  document.getElementById("track-result").innerHTML=`
+    <div class="card">
+      <div class="flex gap-2 mb-1" style="flex-wrap:wrap">
+        <div><span class="hint">Order #${o.id}</span></div>
+        ${statusBadge(o.status)}
+      </div>
+      <div class="strong" style="margin:.5rem 0">${o.product_name}</div>
+      <hr class="divider"/>
+      <div class="grid-2" style="gap:.8rem">
+        <div><div class="hint">BUYER</div><div>${o.buyer_name} · ${o.buyer_phone}</div></div>
+        <div><div class="hint">FARM</div><div>${o.producer_name}</div></div>
+        <div><div class="hint">DELIVERY TYPE</div><div>${o.delivery_type.toUpperCase()}</div></div>
+        <div><div class="hint">TOTAL</div><div class="text-accent strong">₹${o.total_price} + ₹${o.delivery_cost} delivery</div></div>
+      </div>
+      ${o.driver_name?`<hr class="divider"/><div class="driver-card" style="margin:0">
+        <div class="driver-avatar">${o.vehicle_type==="bike"?"🏍️":o.vehicle_type==="truck"?"🚛":"🛺"}</div>
+        <div>
+          <div class="driver-name">${o.driver_name}</div>
+          <div class="driver-details">${o.vehicle_num} · ⭐ ${o.driver_rating}</div>
+          <div class="driver-details">📞 ${o.driver_phone}</div>
+        </div>
+      </div>`:"<div class='hint mt-1'>No driver assigned yet.</div>"}
+      ${o.pickup_id?`<div class="hint mt-2">PICKUP TOKEN</div><div class="pickup-token">${o.pickup_id}</div>`:""}
+    </div>`;
+
+  // Update map
+  const mapDiv=document.getElementById("track-map");
+  if(o.farm_lat && o.farm_lng){
+    mapDiv.innerHTML=`
+      <div class="map-icon">🗺️</div>
+      <div>Farm: ${o.producer_name}</div>
+      <div class="hint">📍 ${o.farm_lat}, ${o.farm_lng}</div>
+      ${o.driver_lat?`<div class="hint">🚗 Driver at: ${Number(o.driver_lat).toFixed(4)}, ${Number(o.driver_lng).toFixed(4)}</div>`:""}
+      <a href="https://www.google.com/maps/dir/${o.farm_lat},${o.farm_lng}" target="_blank"
+         class="btn btn-outline btn-sm" style="text-decoration:none;margin-top:.5rem">Open in Google Maps</a>`;
+  }
+}
+
+// ── OTP Verification ─────────────────────────────────────────
+async function lookupOTPs(){
+  const id=document.getElementById("lookup-order-id").value;
+  if(!id){toast("Enter order ID","error");return;}
+  const res=await api("/orders/"+id+"/otps");
+  const div=document.getElementById("otp-lookup-result");
+  if(res.status!=="ok"||!res.data.length){
+    div.innerHTML="<div class='hint mt-2'>No OTPs found for this order.</div>";return;
+  }
+  div.innerHTML=res.data.map(o=>`
+    <div class="otp-box">
+      <div class="otp-type">${o.otp_type} OTP ${o.is_used?"✓ USED":""}</div>
+      <div class="otp-code">${o.otp_code}</div>
+      <div class="hint">Expires: ${o.expires_at?.slice(0,16)}</div>
+    </div>`).join("");
+}
+
+async function verifyOTP(){
+  const oid=document.getElementById("v-order-id").value;
+  const type=document.getElementById("v-type").value;
+  const code=document.getElementById("v-code").value;
+  if(!oid||!code){toast("Fill all fields","error");return;}
+
+  const res=await api("/orders/"+oid+"/verify-otp","POST",{otp_type:type,otp_code:code});
+  const div=document.getElementById("v-result");
+  if(res.status==="ok"){
+    toast("OTP Verified! Order status: "+res.data.order_status);
+    div.innerHTML=`<div class="card" style="border-color:var(--accent)">
+      <div class="text-accent strong">✓ OTP Verified Successfully</div>
+      <div class="mt-1">Order status updated to: ${statusBadge(res.data.order_status)}</div>
+    </div>`;
+  } else {
+    toast(res.message,"error");
+    div.innerHTML=`<div class="card" style="border-color:#e74c3c">
+      <div class="text-danger strong">✗ Verification Failed</div>
+      <div class="hint mt-1">${res.message}</div>
+    </div>`;
+  }
+}
+
+// ── Back-haul ─────────────────────────────────────────────────
+async function loadBackhaul(){
+  const res=await api("/backhaul/drivers");
+  const div=document.getElementById("returning-drivers");
+  const sel=document.getElementById("bh-driver");
+  if(res.status==="ok"){
+    div.innerHTML=res.data.map(d=>`
+      <div class="driver-card" style="margin-bottom:.7rem">
+        <div class="driver-avatar">${d.vehicle_type==="bike"?"🏍️":d.vehicle_type==="truck"?"🚛":"🛺"}</div>
+        <div>
+          <div class="driver-name">${d.name}</div>
+          <div class="driver-details">${d.vehicle_num} · ⭐ ${d.rating}</div>
+        </div>
+        <span class="status status-confirmed" style="margin-left:auto">RETURNING</span>
+      </div>`).join("");
+    sel.innerHTML=res.data.map(d=>`<option value="${d.id}">${d.name} — ${d.vehicle_type} (${d.vehicle_num})</option>`).join("");
+  }
+  // Set today as default date
+  document.getElementById("bh-date").valueAsDate=new Date();
+}
+
+async function bookBackhaul(){
+  const payload={
+    driver_id:parseInt(document.getElementById("bh-driver").value),
+    requester_id:parseInt(document.getElementById("bh-producer").value),
+    item_desc:document.getElementById("bh-item").value,
+    weight_kg:parseFloat(document.getElementById("bh-weight").value),
+    origin_city:document.getElementById("bh-origin").value,
+    destination:document.getElementById("bh-dest").value,
+    scheduled_date:document.getElementById("bh-date").value,
+    discount_pct:40,
+  };
+  if(!payload.item_desc||!payload.destination){toast("Fill all fields","error");return;}
+  const res=await api("/backhaul","POST",payload);
+  const div=document.getElementById("bh-result");
+  div.style.display="block";
+  if(res.status==="ok"){
+    toast("Back-haul booked!");
+    div.innerHTML=`<div class="section-title text-accent">✓ Booking Confirmed</div>
+      <div class="grid-2 mt-2" style="gap:.8rem">
+        <div><div class="hint">BOOKING ID</div><div class="strong">#${res.data.booking_id}</div></div>
+        <div><div class="hint">ORIGINAL COST</div><div class="strong">₹${res.data.original_cost}</div></div>
+        <div><div class="hint">DISCOUNT</div><div class="text-accent strong">${res.data.discount_pct}% OFF</div></div>
+        <div><div class="hint">YOU PAY</div><div class="text-warn strong">₹${res.data.final_cost}</div></div>
+      </div>`;
+  } else {
+    toast(res.message,"error");
+    div.innerHTML=`<div class="text-danger">${res.message}</div>`;
+  }
+}
+
+// ── Init ─────────────────────────────────────────────────────
+loadDashboard();
+</script>
+</body>
+</html>

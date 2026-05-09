@@ -1,15 +1,17 @@
-# 🌾 Urban Rural Connector (URC) - Gram-to-City
-
+🌾 Urban Rural Connector (URC) - Gram-to-City
 A Social Enterprise platform designed to bridge the gap between rural producers and urban consumers using smart logistics and AI.
 
-## 🚀 Project Overview
-URC is a first-year B.Tech CSE project that addresses the "Middleman Crisis" in India. By connecting farmers directly to city buyers, we ensure farmers earn more while consumers get fresher products at lower costs.
+🚀 Project Overview
+URC is a first-year B.Tech CSE project that addresses the "Middleman Crisis" in India. By establishing a direct digital link between rural farmers and urban buyers, the platform ensures farmers receive fair market value for their produce while consumers access fresher goods at reduced costs. It serves as a comprehensive ecosystem to empower rural economies through technology.
 
-## ✨ Key Features
-* **Context-Aware AI Assistant:** A smart chatbot powered by Groq (Llama-3) that changes its persona based on the page you are viewing.
-* **3-Tier Logistics:** Includes Standard Delivery, Self-Pickup, and **Group Pickup** (which saves 20% on costs).
-* **Dual-OTP Security:** A two-stage verification process to ensure safe transportation of goods.
-* **Reverse Logistics:** Optimized transport where trucks carry urban supplies back to villages to reduce fuel waste.
+✨ Key Features
+Direct Farmer-to-Consumer (F2C) Marketplace: A streamlined platform that removes intermediary costs, allowing for transparent pricing and higher profit margins for producers.
+
+Context-Aware AI Assistant: A smart chatbot powered by Groq (Llama-3) that adapts its persona and assistance based on the user's current page (e.g., providing crop advice on the farmer dashboard or recipe tips on the consumer storefront).
+
+Quality Assurance & Freshness Tracking: Integrated systems to help urban consumers verify the source and harvest date of their products.
+
+Community-Driven Commerce: Tools designed to foster trust and long-term relationships between rural communities and urban neighborhoods.
 
 ## 🛠️ Tech Stack
 * **Backend:** Flask (Python)

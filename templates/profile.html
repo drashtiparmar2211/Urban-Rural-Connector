@@ -47,6 +47,11 @@
                 {% endif %}
             </div>
 
+            <div class = "info-item">
+                <span class="info-label">Farm Pickup Address:</span>
+                <span class="info-value">{{ user.address if user.address else 'Not Specified' }}</span>
+            </div>
+
             <div class="info-item">
                 <span class="info-label">Account Status</span>
                 <span class="info-value" style="color: #27ae60;">● Active Member</span>

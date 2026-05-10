@@ -1,0 +1,141 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container" style="max-width: 550px; margin: 50px auto; background: white; padding: 40px; border-radius: 20px; box-shadow: 0 15px 35px rgba(0,0,0,0.1);">
+    <div style="text-align: center; margin-bottom: 30px;">
+        <h2 style="color: #1e293b; font-weight: 800;">Secure Checkout</h2>
+        <p style="color: #64748b;">Complete your order to support rural producers </p>
+    </div>
+
+    <div style="background: #f8fafc; padding: 20px; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 25px;">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font-weight: 600; color: #475569;">Total Amount:</span>
+            <strong style="color: #166534; font-size: 1.4rem;">₹{{ total }} </strong>
+        </div>
+    </div>
+
+    <form action="{{ url_for('process_payment') }}" method="POST">
+        
+        <div style="text-align: left; margin-bottom: 30px;">
+            <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 15px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">
+                🚚 1. Choose Delivery Method
+            </label>
+
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <label style="display: flex; align-items: center; padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px; cursor: pointer; transition: 0.3s;" onmouseover="this.style.borderColor='#3b82f6'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#e2e8f0'">
+                    <input type="radio" name="delivery_type" value="standard" checked style="margin-right: 15px; width: 18px; height: 18px;">
+                    <div>
+                        <div style="font-weight: 700; color: #1e293b;">Standard Delivery </div>
+                        <div style="font-size: 0.8rem; color: #64748b;">Direct door-to-door transit via URC Drivers </div>
+                    </div>
+                </label>
+
+                <label style="display: flex; align-items: center; padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px; cursor: pointer; transition: 0.3s;" onmouseover="this.style.borderColor='#3b82f6'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#e2e8f0'">
+                    <input type="radio" name="delivery_type" value="group" style="margin-right: 15px; width: 18px; height: 18px;">
+                    <div>
+                        <div style="font-weight: 700; color: #1e293b;">Group Pickup <span style="color: #166534; font-size: 0.75rem; background: #dcfce7; padding: 2px 8px; border-radius: 5px; margin-left: 5px;">Save 20%</span> </div>
+                        <div style="font-size: 0.8rem; color: #64748b;">Join neighbors to reduce fuel and shipping costs </div>
+                    </div>
+                </label>
+
+                <label style="display: flex; align-items: center; padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px; cursor: pointer; transition: 0.3s;" onmouseover="this.style.borderColor='#3b82f6'" onmouseout="if(!this.querySelector('input').checked) this.style.borderColor='#e2e8f0'">
+                    <input type="radio" name="delivery_type" value="self" style="margin-right: 15px; width: 18px; height: 18px;">
+                    <div>
+                        <div style="font-weight: 700; color: #1e293b;">Self-Pickup </div>
+                        <div style="font-size: 0.8rem; color: #64748b;">Collect directly from the farm (Free) </div>
+                    </div>
+                </label>
+            </div>
+        </div>
+
+        <div style="text-align: left; margin-bottom: 30px;">
+            <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 15px; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">
+                💳 2. Payment Method
+            </label>
+
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <label class="pay-label" style="display: flex; align-items: center; padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px; cursor: pointer; transition: 0.3s;">
+                    <input type="radio" name="payment_method" value="cod" checked style="margin-right: 15px; width: 18px; height: 18px;">
+                    <div style="font-weight: 700; color: #1e293b;">Cash on Delivery (COD)</div>
+                </label>
+
+                <label class="pay-label" style="display: flex; align-items: center; padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px; cursor: pointer; transition: 0.3s;">
+                    <input type="radio" name="payment_method" value="card" style="margin-right: 15px; width: 18px; height: 18px;">
+                    <div style="font-weight: 700; color: #1e293b;">Credit / Debit Card</div>
+                </label>
+
+                <label class="pay-label" style="display: flex; align-items: center; padding: 15px; border: 2px solid #e2e8f0; border-radius: 12px; cursor: pointer; transition: 0.3s;">
+                    <input type="radio" name="payment_method" value="upi" style="margin-right: 15px; width: 18px; height: 18px;">
+                    <div style="font-weight: 700; color: #1e293b;">UPI (Google Pay / PhonePe)</div>
+                </label>
+            </div>
+
+            <div id="card-details-box" style="display: none; margin-top: 15px; background: #ffffff; border: 1px solid #3b82f6; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(59, 130, 246, 0.1);">
+                <input type="text" placeholder="Card Number" style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px; margin-bottom: 10px; font-family: monospace;"> 
+                <div style="display: flex; gap: 10px;">
+                    <input type="text" placeholder="MM/YY" style="width: 50%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px;">
+                    <input type="text" placeholder="CVV" style="width: 50%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px;"> 
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: left; margin-bottom: 30px;">
+            <label style="display: block; font-weight: 700; color: #1e293b; margin-bottom: 15px; font-size: 0.9rem; text-transform: uppercase;">
+                📍 Step 3: Address Information
+            </label>
+    
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+                <input type="text" name="delivery_address" placeholder="Your Full Delivery Address" 
+                    style="width: 100%; padding: 12px; border: 1px solid #cbd5e1; border-radius: 8px;" required>
+        
+                <p style="font-size: 0.8rem; color: #64748b;">* Pickup address is automatically pulled from the Farmer's profile.</p>
+            </div>
+        </div>
+
+        <button type="submit" class="btn-nav btn-signup" style="width: 100%; padding: 18px; border: none; border-radius: 12px; background: #166534; color: white; font-weight: 700; font-size: 1.1rem; cursor: pointer; transition: 0.3s; box-shadow: 0 4px 6px rgba(22, 101, 52, 0.2);">
+            Pay & Confirm Order 
+        </button>
+    </form>
+
+    <p style="margin-top: 20px; color: #94a3b8; font-size: 0.8rem; text-align: center;">
+        🔒 Your payment is encrypted and secure. 
+    </p>
+</div>
+
+<script>
+    // Delivery Selection Highlights 
+    document.querySelectorAll('input[name="delivery_type"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            document.querySelectorAll('input[name="delivery_type"]').forEach(r => {
+                r.parentElement.style.borderColor = '#e2e8f0';
+                r.parentElement.style.background = 'white';
+            });
+            if(this.checked) {
+                this.parentElement.style.borderColor = '#3b82f6';
+                this.parentElement.style.background = '#eff6ff'; 
+            }
+        });
+    });
+
+    // Payment Selection Highlights and Dynamic Form
+    document.querySelectorAll('input[name="payment_method"]').forEach(radio => {
+        radio.addEventListener('change', function() {
+            // Update labels
+            document.querySelectorAll('.pay-label').forEach(l => {
+                l.style.borderColor = '#e2e8f0';
+                l.style.background = 'white';
+            });
+            
+            const cardBox = document.getElementById('card-details-box');
+            
+            if(this.checked) {
+                this.parentElement.style.borderColor = '#3b82f6';
+                this.parentElement.style.background = '#eff6ff';
+                
+                // Show card inputs ONLY if 'card' is selected
+                cardBox.style.display = (this.value === 'card') ? 'block' : 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}

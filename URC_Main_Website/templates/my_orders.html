@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container" style="max-width: 800px; margin: 50px auto; padding: 20px;">
+    <h2>📦 My Orders</h2>
+    <p style="color: #64748b; margin-bottom: 20px;">Use the Order ID to track your delivery in the Transport Module.</p>
+
+    {% if orders %}
+        {% for order in orders %}
+        <div style="background: white; padding: 20px; margin-bottom: 15px; border-radius: 10px; border: 1px solid #ddd; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <span style="background: #e0e7ff; color: #4338ca; padding: 2px 8px; border-radius: 4px; font-weight: bold; font-size: 0.8rem;">
+                        #ID: {{ order.id }}
+                    </span>
+                    <h3 style="margin: 10px 0;">{{ order.product_name }}</h3>
+                    <p style="margin: 0; color: #666;">Status: <strong>{{ order.status }}</strong></p>
+                </div>
+                <div style="text-align: right;">
+                    <div style="font-size: 1.2rem; font-weight: bold; color: #2d6a4f;">₹{{ order.price }}</div>
+                </div>
+            </div>
+
+            <div style="margin-top: 15px; display: flex; gap: 10px;">
+                <a href="http://localhost:5001" target="_blank" style="background: #3b82f6; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none; font-size: 0.9rem;">
+                    Track Delivery
+                </a>
+
+                {% if order.status != 'completed' %}
+                <a href="{{ url_for('complete_order', order_id=order.id) }}" style="background: #166534; color: white; padding: 10px 15px; border-radius: 5px; text-decoration: none; font-size: 0.9rem;">
+                    Mark as Received
+                </a>
+                {% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    {% else %}
+        <p>No orders found. <a href="{{ url_for('shop') }}">Go to Shop</a></p>
+    {% endif %}
+</div>
+{% endblock %}

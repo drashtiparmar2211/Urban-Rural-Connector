@@ -1,0 +1,281 @@
+{% extends "base.html" %}
+
+{% block title %}Urban Dashboard - {{ user.name }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/dashboard.css') }}">
+<style>
+    /* PROFESSIONAL URBAN THEME - NO SOLID BLOCKS */
+    :root {
+        --urban-navy: #1e293b;    /* Slate 800 */
+        --urban-blue: #3b82f6;    /* Modern Blue */
+        --urban-bg: #f8fafc;      /* Sky 50 */
+        --urban-border: #e2e8f0;  /* Slate 200 */
+        --glass-bg: rgba(255, 255, 255, 0.8);
+    }
+
+    body {
+        background-color: var(--urban-bg);
+        /* Subtle geometric pattern for professionalism */
+        background-image: radial-gradient(#cbd5e1 0.5px, transparent 0.5px);
+        background-size: 24px 24px;
+        color: var(--urban-navy);
+        font-family: 'Inter', sans-serif;
+    }
+
+    .dashboard-content {
+        padding-top: 50px;
+    }
+
+    /* PREMIUM HEADER - CLEAN WHITE */
+    .urban-header {
+        background: white;
+        padding: 60px 0;
+        border-bottom: 1px solid var(--urban-border);
+        margin-bottom: 0;
+        box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+    }
+
+    .profile-name {
+        font-size: 2.8rem;
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        color: var(--urban-navy);
+    }
+
+    .conscious-consumer-badge {
+        display: inline-block;
+        background: #dcfce7;
+        color: #166534;
+        padding: 6px 16px;
+        border-radius: 9999px;
+        font-weight: 700;
+        font-size: 0.8rem;
+        margin-top: 12px;
+        text-transform: uppercase;
+    }
+
+    /* GLASSMORPHISM IMPACT CARDS */
+    .impact-summary {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+    }
+
+    .impact-card {
+        background: white;
+        padding: 25px;
+        border-radius: 20px;
+        border: 1px solid var(--urban-border);
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    }
+
+    .impact-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        border-color: var(--urban-blue);
+    }
+
+    .impact-card h3 {
+        font-size: 2rem;
+        margin-bottom: 5px;
+        color: var(--urban-blue);
+        font-weight: 800;
+    }
+
+    /* MODERN SECTION CARDS */
+    .dashboard-section {
+        background: var(--glass-bg);
+        backdrop-filter: blur(10px);
+        padding: 35px;
+        border-radius: 24px;
+        border: 1px solid white;
+        margin-bottom: 40px;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.04);
+    }
+
+    .section-header h2 {
+        font-weight: 800;
+        font-size: 1.6rem;
+        color: var(--urban-navy);
+        margin-bottom: 20px;
+    }
+
+    /* TECH INPUTS */
+    .tech-input {
+        width: 100%;
+        padding: 14px;
+        margin-bottom: 15px;
+        border: 1.5px solid var(--urban-border);
+        border-radius: 12px;
+        font-family: 'Inter', sans-serif;
+        background: white;
+        transition: 0.3s;
+        box-sizing: border-box;
+    }
+
+    .tech-input:focus {
+        border-color: var(--urban-blue);
+        box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+        outline: none;
+    }
+
+    .btn-premium {
+        background: var(--urban-blue);
+        color: white;
+        padding: 14px 30px;
+        border-radius: 12px;
+        font-weight: 700;
+        border: none;
+        transition: 0.3s;
+        cursor: pointer;
+        display: inline-block;
+        text-decoration: none;
+    }
+
+    .btn-premium:hover {
+        background: #2563eb;
+        transform: scale(1.02);
+    }
+
+    .order-card {
+        background: white;
+        border: 1px solid var(--urban-border);
+        border-radius: 16px;
+        margin-bottom: 15px;
+        transition: 0.2s;
+    }
+    
+    .order-card:hover {
+        border-color: var(--urban-blue);
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+
+<nav class="dashboard-nav" style="background: white; border-bottom: 1px solid #eee; position: fixed; top: 0; width: 100%; z-index: 1000; padding: 15px 0;">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+        <span style="font-weight: 800; color: var(--urban-navy); font-size: 1.2rem;">URC | Urban Hub</span>
+        <div class="nav-actions">
+            <a href="{{ url_for('homepage') }}" style="color: var(--urban-navy); font-weight: 600; text-decoration: none; margin-right: 25px;">Home</a>
+            <a href="{{ url_for('shop') }}" style="color: var(--urban-blue); font-weight: 700; text-decoration: none;">Marketplace</a>
+        </div>
+    </div>
+</nav>
+
+<section class="profile-header urban-header">
+    <div class="container">
+        <div class="row" style="display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; gap: 40px;">
+            <div class="profile-info" style="display: flex; align-items: center; gap: 30px;">
+                <a href="{{ url_for('profile') }}" style="text-decoration: none;">
+                    <div class="profile-avatar" style="width: 110px; height: 110px; border-radius: 30px; overflow: hidden; border: 4px solid white; box-shadow: 0 10px 20px rgba(0,0,0,0.1);">
+                        <img src="{{ url_for('static', filename='images/default-avatar.png') }}" alt="{{ user.name }}" style="width: 100%; height: 100%; object-fit: cover;">
+                    </div>
+                </a>
+                <div class="profile-details">
+                    <h1 class="profile-name">Hello, {{ user.name }}</h1>
+                    <p class="profile-location" style="color: var(--urban-slate); font-weight: 500;">📍 {{ user.location }} | <span style="color: var(--urban-blue);">Urban Member</span></p>
+                    <div class="conscious-consumer-badge">
+                        <span>🌱 Conscious Consumer</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="impact-summary">
+                <div class="impact-card">
+                    <h3>₹{{ "%.2f"|format(total_impact) }}</h3>
+                    <p style="font-size: 0.85rem; color: #64748b; font-weight: 600;">Trade Contribution</p>
+                </div>
+                <div class="impact-card">
+                    <h3>{{ (orders|length * 0.5)|round(1) }} kg</h3>
+                    <p style="font-size: 0.85rem; color: #64748b; font-weight: 600;">CO2 Prevented</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="dashboard-content">
+    <div class="container">
+        <div class="row" style="display: flex; gap: 30px; align-items: flex-start;">
+            
+            <div style="flex: 2;">
+                <div class="dashboard-section">
+                    <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
+                        <h2>Recent Curations</h2>
+                        <a href="{{ url_for('shop') }}" class="btn-premium">Browse Market</a>
+                    </div>
+                    
+                    <div class="orders-list">
+                        {% if orders %}
+                            {% for order in orders %}
+                            <div class="order-card">
+                                <div style="display: flex; padding: 20px; gap: 20px; align-items: center;">
+                                    <img src="{{ order.product.image_url }}" style="width: 70px; height: 70px; border-radius: 12px; object-fit: cover;">
+                                    <div style="flex: 1;">
+                                        <h4 style="margin: 0; font-size: 1.1rem;">{{ order.product.title }}</h4>
+                                        <p style="font-size: 0.85rem; color: #64748b; margin: 4px 0;">From: {{ order.product.seller.name }}</p>
+                                        <span style="font-size: 0.7rem; font-weight: 700; color: white; background: var(--urban-blue); padding: 3px 10px; border-radius: 4px; text-transform: uppercase;">{{ order.status }}</span>
+                                    </div>
+                                    <div style="text-align: right;">
+                                        <p style="font-weight: 800; font-size: 1.2rem; margin: 0; color: var(--urban-navy);">₹{{ "%.2f"|format(order.total_amount) }}</p>
+                                        <small style="color: #94a3b8; font-weight: 600;">{{ order.created_at.strftime('%d %b') }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        {% else %}
+                            <div style="text-align: center; padding: 60px; border: 2px dashed #cbd5e1; border-radius: 20px; background: rgba(255,255,255,0.5);">
+                                <p style="color: #64748b; font-weight: 500;">No active orders. Your next discovery awaits in the marketplace.</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="dashboard-section" style="border-left: 6px solid var(--urban-blue);">
+                    <div class="section-header">
+                        <h2>Tech for Tribes</h2>
+                    </div>
+                    <p style="color: #64748b; font-size: 0.95rem; margin-bottom: 25px; line-height: 1.6;">
+                        Your technical expertise can revolutionize rural production. Propose an irrigation hack, a solar setup, or a logistics idea.
+                    </p>
+                    <form action="{{ url_for('submit_contribution') }}" method="POST">
+                        <input type="text" name="title" class="tech-input" placeholder="Title of your innovation" required>
+                        <textarea name="content" class="tech-input" rows="4" placeholder="Explain the technical solution and how it helps farmers..." required></textarea>
+                        <button type="submit" class="btn-premium">Submit to Knowledge Hub</button>
+                    </form>
+                </div>
+            </div>
+
+            <div style="flex: 1;">
+                <div class="dashboard-section" style="background: var(--urban-navy); color: white;">
+                    <h2 style="color: #60a5fa; font-size: 1.3rem; margin-bottom: 10px;">Authentic Wisdom</h2>
+                    <p style="font-size: 0.85rem; opacity: 0.7; margin-bottom: 25px;">Direct remedies from our Rural Producers.</p>
+                    
+                    {% if remedies %}
+                        {% for remedy in remedies %}
+                        <div style="background: rgba(255,255,255,0.08); padding: 18px; border-radius: 16px; margin-bottom: 15px; border: 1px solid rgba(255,255,255,0.1);">
+                            <h4 style="margin: 0 0 8px 0; color: #fbbf24; font-size: 1rem;">{{ remedy.title }}</h4>
+                            <p style="font-size: 0.85rem; line-height: 1.6; margin-bottom: 12px; color: #e2e8f0;">{{ remedy.content }}</p>
+                            <small style="color: #60a5fa; font-weight: 600;">Shared by: {{ remedy.contributor.name }}</small>
+                        </div>
+                        {% endfor %}
+                    {% else %}
+                        <p style="font-size: 0.85rem; font-style: italic; opacity: 0.5;">Awaiting new rural wisdom...</p>
+                    {% endif %}
+                </div>
+
+                <div class="dashboard-section">
+                    <h3 style="margin-bottom: 10px;">Reverse Market</h3>
+                    <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 20px; line-height: 1.5;">Have gadgets or tools to donate/exchange with farmers?</p>
+                    <a href="{{ url_for('reverse_market') }}" class="btn-premium" style="display: block; text-align: center; background: var(--urban-navy);">Open Exchange Hub</a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}

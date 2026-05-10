@@ -8,12 +8,12 @@ URC is a first-year B.Tech CSE project designed to solve the "Middleman Crisis" 
 
 ## ✨ Key Features & Innovations
 * **🚜 One Unified Website, Two Powerful Modules:** Although the platform operates as a single seamless website, it is powered by two interconnected backend modules (Marketplace & Logistics) that sync in real-time to handle the entire lifecycle of an order.
-* 
+ 
 * **🤖 Persona-Adaptive AI Assistant:** A sophisticated chatbot powered by **Groq (Llama-3.3-70B)**. It automatically detects which part of the website you are on to change its persona—acting as a *Rural Aide* for farmers, an *Urban Assistant* for shoppers, or a *Logistics Expert* for delivery drivers.
-* 
+  
 * **🔐 Dual-Handshake Security Protocol:** A robust, two-stage **Dual-OTP system** ensures end-to-end security. A "Pickup OTP" confirms the driver has the goods from the farm, and a "Delivery OTP" ensures the buyer has received the package before payment is released.
 * **👥 Community-Driven Economy:** Integrated **Group Pooling** technology allows urban neighbors to join orders together, automatically triggering shared delivery routes and reducing individual shipping costs by 20%.
-* 
+  
 * **🚛 Eco-Friendly "Reverse Logistics":** To maximize efficiency, the platform utilizes **Back-haul Optimization**, allowing farmers to book space on returning delivery vehicles to bring city supplies back to villages at a 40% discount.
 
 
